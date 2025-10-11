@@ -1,0 +1,2329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Evolution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: radial-gradient(circle at center, #0a0a2e 0%, #000000 100%);
+            color: #64ffda;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Animated stars */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 20px #64ffda;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #4fd3a7;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .main-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 250px;
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(79, 211, 167, 0.1) 100%);
+            border: 1px solid #64ffda;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #4fd3a7;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 10px #64ffda;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .main-button {
+            background: linear-gradient(135deg, #64ffda 0%, #4fd3a7 100%);
+            color: #0a0a2e;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .main-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
+        }
+
+        .main-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            background: rgba(100, 255, 218, 0.1);
+            border: 1px solid #64ffda;
+            color: #64ffda;
+            padding: 12px 24px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #64ffda 0%, #4fd3a7 100%);
+            color: #0a0a2e;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .upgrade-card {
+            background: linear-gradient(135deg, rgba(100, 255, 218, 0.05) 0%, rgba(79, 211, 167, 0.05) 100%);
+            border: 1px solid #64ffda;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(100, 255, 218, 0.2);
+            border-color: #4fd3a7;
+        }
+
+        .upgrade-card.affordable {
+            border-color: #4fd3a7;
+            background: linear-gradient(135deg, rgba(79, 211, 167, 0.1) 0%, rgba(100, 255, 218, 0.1) 100%);
+        }
+
+        .upgrade-card.maxed {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #666;
+        }
+
+        .upgrade-icon {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .upgrade-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #64ffda;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .upgrade-cost {
+            color: #ff6b9d;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .upgrade-description {
+            color: #b0bec5;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #64ffda 0%, #4fd3a7 100%);
+            color: #0a0a2e;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .milestone {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(100, 255, 218, 0.1) 100%);
+            border: 1px solid #ff6b9d;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .milestone.completed {
+            border-color: #4fd3a7;
+            background: linear-gradient(135deg, rgba(79, 211, 167, 0.1) 0%, rgba(100, 255, 218, 0.1) 100%);
+        }
+
+        .milestone-title {
+            color: #ff6b9d;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .milestone.completed .milestone-title {
+            color: #4fd3a7;
+        }
+
+        .black-hole-visual {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 30px;
+            position: relative;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, #000000 0%, #1a0033 70%, transparent 100%);
+            box-shadow: 0 0 50px #9c27b0, inset 0 0 50px #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .black-hole-visual::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: conic-gradient(from 0deg, transparent, #9c27b0, transparent, #3f51b5, transparent);
+            animation: rotate 10s linear infinite;
+            opacity: 0.7;
+        }
+
+        .black-hole-visual::after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background: #000;
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .black-hole-mass {
+            position: relative;
+            z-index: 2;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e1bee7;
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .main-stats {
+                flex-direction: column;
+            }
+            
+            .upgrades-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    
+    <div class="container">
+        <h1 class="title">COSMIC EVOLUTION</h1>
+        <p class="subtitle">• Idle Universe Simulator •</p>
+
+        <div class="main-stats">
+            <div class="stat-card">
+                <div class="stat-label">Cosmic Energy</div>
+                <div class="stat-value" id="cosmicEnergy">1.00</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Energy Generation</div>
+                <div class="stat-value" id="energyGeneration">1.00/sec</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Universe Age</div>
+                <div class="stat-value" id="universeAge">0.00 eons</div>
+            </div>
+        </div>
+
+        <div class="buttons-row">
+            <button class="main-button" id="bigBangReset">🌀 Big Bang Reset (resets everything)</button>
+            <button class="main-button" id="stellarCollapse" style="display: none;">⭐ Stellar Collapse</button>
+            <button class="main-button" id="quantumLeap" style="display: none;">🔮 Quantum Leap</button>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="cosmic-research">🔬 Cosmic Research</div>
+            <div class="tab" data-tab="dark-matter" style="display: none;">🌑 Dark Matter Technologies</div>
+            <div class="tab" data-tab="quantum" style="display: none;">🔮 Quantum Mechanics</div>
+            <div class="tab" data-tab="dust">✨ Dust</div>
+            <div class="tab" data-tab="black-hole" style="display: none;">⚫ Black Hole</div>
+        </div>
+
+        <div class="tab-content active" id="cosmic-research">
+            <div class="upgrades-grid" id="cosmicUpgrades"></div>
+        </div>
+
+        <div class="tab-content" id="dark-matter">
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Dark Matter</div>
+                <div class="stat-value" id="darkMatter">0.00</div>
+            </div>
+            <div class="upgrades-grid" id="darkMatterUpgrades"></div>
+        </div>
+
+        <div class="tab-content" id="quantum">
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Quantum Leaps</div>
+                <div class="stat-value" id="quantumLeaps">0</div>
+            </div>
+            <div class="upgrades-grid" id="quantumUpgrades"></div>
+            <div id="milestones" style="margin-top: 30px;"></div>
+        </div>
+
+        <div class="tab-content" id="dust">
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Dust</div>
+                <div class="stat-value" id="dustAmount">0</div>
+            </div>
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Collections</div>
+                <div class="stat-value" id="dustCollections">0</div>
+            </div>
+            <div class="buttons-row" style="margin-bottom: 30px;">
+                <button class="main-button" id="collectDustBtn">✨ Collect Dust (0:00:00)</button>
+            </div>
+            <div class="upgrades-grid" id="dustUpgrades"></div>
+        </div>
+
+        <div class="tab-content" id="black-hole">
+            <div class="black-hole-visual">
+                <div class="black-hole-mass" id="blackHoleMassDisplay">1.00 grams</div>
+            </div>
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Black Hole Mass</div>
+                <div class="stat-value" id="blackHoleMass">1.00 grams</div>
+            </div>
+            <div class="stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Mass Generation</div>
+                <div class="stat-value" id="massGeneration">1.00/sec</div>
+            </div>
+            <div class="upgrades-grid" id="blackHoleUpgrades"></div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Game state
+        let gameState = {
+            cosmicEnergy: 1,
+            energyGeneration: 1,
+            universeAge: 0,
+            darkMatter: 0,
+            quantumLeaps: 0,
+            totalQuantumLeaps: 0,
+            darkMatterGeneration: 0,
+            upgrades: {},
+            milestones: [],
+            bigBangClicks: 0,
+            bigBangLastClick: 0,
+            darkMatterResetClicks: 0,
+            darkMatterResetLastClick: 0,
+            shownTrillionNotification: false,
+            shownFirstTrillionNotification: false,
+            shownScientificNotification: false,
+            bestCosmicEnergy: 1,
+            shownUltimateNotification: false,
+            dust: 0,
+            lastDustCollection: 0,
+            dustCollections: 0,
+            shownQuantumScientificNotification: false,
+            shownQuantumScientificNotationChange: false,
+            shownQuantumLeapTrillionNotification: false,
+            shownQuantumScientificNotationChange: false,
+            blackHoleUnlocked: false,
+            blackHoleMass: 1,
+            blackHoleUnit: 'grams',
+            shownBlackHoleScientificNotification: false
+        };
+
+        // Upgrade definitions
+        const cosmicUpgrades = [
+            {id: 'stellarFusion', name: 'Stellar Fusion', icon: '⭐', cost: 10, costType: 'cosmicEnergy', effect: 'Double energy generation', multiplier: 2, maxLevel: 1},
+            {id: 'galacticNetwork', name: 'Galactic Network', icon: '🌌', cost: 25, costType: 'cosmicEnergy', effect: 'Triple energy flow', multiplier: 3, maxLevel: 1},
+            {id: 'temporalAcceleration', name: 'Temporal Acceleration', icon: '⏰', cost: 75, costType: 'cosmicEnergy', effect: 'Energy boost scales with universe age: (age/80)+1', maxLevel: 1},
+            {id: 'supernovaChain', name: 'Supernova Chain', icon: '💥', cost: 300, costType: 'cosmicEnergy', effect: '8x energy boost', multiplier: 8, maxLevel: 1},
+            {id: 'cosmicResonance', name: 'Cosmic Resonance', icon: '🎵', cost: 2500, costType: 'cosmicEnergy', effect: '3.5x energy from cosmic frequencies', multiplier: 3.5, maxLevel: 1},
+            {id: 'timeDistortionField', name: 'Time Distortion Field', icon: '🕳️', cost: 12500, costType: 'cosmicEnergy', effect: 'Temporal boost: (age/50)^0.95+1', maxLevel: 1, showBoost: true},
+            {id: 'nebulaHarvesting', name: 'Nebula Harvesting', icon: '☁️', cost: 50000, costType: 'cosmicEnergy', effect: '3x energy from cosmic nebulae', multiplier: 3, maxLevel: 1},
+            {id: 'pulsarSync', name: 'Pulsar Synchronization', icon: '🌟', cost: 150000, costType: 'cosmicEnergy', effect: '3.5x energy from pulsar emissions', multiplier: 3.5, maxLevel: 1},
+            {id: 'quasarChanneling', name: 'Quasar Channeling', icon: '☀️', cost: 1500000, costType: 'cosmicEnergy', effect: '2.5x energy boost from quasar power', multiplier: 2.5, maxLevel: 1},
+            {id: 'cosmicMultiplier', name: 'Cosmic Energy Multiplier', icon: '✖️', cost: 5000000, costType: 'cosmicEnergy', effect: 'x5 cosmic energy before 250M, then x3 cosmic energy', maxLevel: 1},
+            {id: 'cosmicEnergyBoost', name: 'Cosmic Energy Boost', icon: '⚡', cost: 25000000, costType: 'cosmicEnergy', effect: 'x2.5 cosmic energy', multiplier: 2.5, maxLevel: 1},
+            {id: 'energyBoostsDarkMatter', name: 'Energy Boosts Dark Matter', icon: '🌀', cost: 75000000, costType: 'cosmicEnergy', effect: 'Cosmic energy boosts dark matter: (energy^0.08)/1.3+1', maxLevel: 1, showBoost: true},
+            {id: 'timeBoostsDarkMatter', name: 'Time Boosts Dark Matter', icon: '⏳', cost: 150000000, costType: 'cosmicEnergy', effect: 'Time boosts dark matter: (time/450)^0.87+1', maxLevel: 1, showBoost: true},
+            {id: 'energyBooststself', name: 'Energy Boosts Itself', icon: '♾️', cost: 800000000, costType: 'cosmicEnergy', effect: 'Cosmic energy boosts itself: (energy^0.04)^1.05+1', maxLevel: 1, showBoost: true},
+            {id: 'darkMatterBoost', name: 'Dark Matter Boost', icon: '🌑⚡', cost: 2000000000, costType: 'cosmicEnergy', effect: 'x2 dark matter', multiplier: 2, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'unlockQuantumForever', name: 'Unlock Quantum Leap Forever', icon: '🔮', cost: 10000000000, costType: 'cosmicEnergy', effect: 'Permanently unlock quantum leap mechanic', maxLevel: 1},
+            {id: 'cosmicEnergyTriple', name: 'Cosmic Energy Triple', icon: '⚡³', cost: 15000000000000, costType: 'cosmicEnergy', effect: 'x3 cosmic energy boost', multiplier: 3, maxLevel: 1},
+            {id: 'galacticEvents', name: 'Galactic Events', icon: '🌠', cost: 100000000000000, costType: 'cosmicEnergy', effect: '15% chance each second to gain x30 cosmic energy for that tick', maxLevel: 1},
+            {id: 'temporalSupercharge', name: 'Temporal Supercharge', icon: '⚡⏰', cost: 1000000000000000, costType: 'cosmicEnergy', effect: 'Time gain boosted by cosmic energy, dark matter, and quantum leaps: (energy×DM×QL)^0.03/1.11+1', maxLevel: 1, showBoost: true},
+            {id: 'infinityEngine3', name: 'Infinity Engine.3', icon: '♾️³', cost: 30000000000000000, costType: 'cosmicEnergy', effect: 'Infinity Engine boost^0.2×2 also boosts quantum leap gains', maxLevel: 1, showBoost: true},
+            {id: 'awesomeBoost', name: 'AWESOME BOOST', icon: '🔥', cost: 500000000000000000, costType: 'cosmicEnergy', effect: 'Cosmic energy boosts itself again: (log₁₀(energy))+1', maxLevel: 1, showBoost: true},
+            {id: 'unoriginalAwesomeBoost', name: 'Unoriginal Awesome Boost', icon: '🔥💭', cost: 80000000000000000000, costType: 'cosmicEnergy', effect: 'Cosmic energy boost itself unoriginally: (log₁₀₀(energy))/5+1', maxLevel: 1, showBoost: true},
+            {id: 'quantumEnergy', name: 'Quantum Energy', icon: '🔮⚡', cost: 500000000000000000000, costType: 'cosmicEnergy', effect: 'x1.5 quantum leap gains', maxLevel: 1},
+            {id: 'priceLeap', name: 'Price Leap', icon: '💰🚀', cost: 300000000000000000000000, costType: 'cosmicEnergy', effect: 'x1.5 cosmic energy, x1.5 dark matter, and x1.5 quantum leap gains', maxLevel: 1},
+            {id: 'deserved', name: 'Deserved', icon: '👑', cost: 1000000000000000000000000, costType: 'cosmicEnergy', effect: 'Cosmic energy multiplier raised to the power of 1.04', maxLevel: 1, showBoost: true},
+            {id: 'thatsDefinitelyGood', name: 'That\'s Definitely Good', icon: '👍', cost: 40000000000000000000000000, costType: 'cosmicEnergy', effect: 'Cosmic energy raised to the power of 1.02', maxLevel: 1, showBoost: true},
+            {id: 'nerfingNerf', name: 'Nerfing Nerf', icon: '⏰💪', cost: 600000000000000000000000000, costType: 'cosmicEnergy', effect: 'Age boosts itself: (age^0.08)+1', maxLevel: 1, showBoost: true},
+            {id: 'reallyFakeUpgrade', name: 'Really Fake Upgrade', icon: '🔥💭🌑', cost: 7000000000000000000000000000, costType: 'cosmicEnergy', effect: 'Unoriginal Awesome Boost upgrade also applies boost to dark matter', maxLevel: 1, showBoost: true},
+            {id: 'justGetItAgain', name: 'Just Get It Again', icon: '💥🌑', cost: 20000000000000000000000000000000, costType: 'cosmicEnergy', effect: 'x5 dark matter', maxLevel: 1, multipliesDarkMatter: true, multiplier: 5},
+            {id: 'allInOne', name: 'all in one', icon: '🌟🔮⚡', cost: 10000000000000000000000000000000000, costType: 'cosmicEnergy', effect: 'The ultimate upgrade: x1.2 cosmic energy, dark matter & quantum leaps • Time boosts all: (time/20k)^0.55/9+1 • Self-boosting: cosmic energy^0.005+1, dark matter^0.005+1, quantum leaps^0.006+1 • Age boost: (energy×DM×QL)^0.001+1 • ^1.005 base multiplier • x1.01 DM&QL per 2 OOMs of energy • Age self-boost: x1.03 per OOM • x1.1 energy till best record, x1.2 after', maxLevel: 1, isAllInOne: true},
+            {id: 'energyBoostBase', name: '+0.02 to Energy Boosts Itself Base', icon: '♾️⚡', cost: 9000000000000000000000000000000000000, costType: 'cosmicEnergy', effect: 'Changes Energy Boosts Itself formula to (energy^0.06)^1.05+1', maxLevel: 1},
+            // Extended upgrades for ultra-high numbers
+            {id: 'hyperdimensionalCore', name: 'Hyperdimensional Core', icon: '🌀', cost: 1e40, costType: 'cosmicEnergy', effect: 'x10 cosmic energy from higher dimensions', multiplier: 10, maxLevel: 1},
+            {id: 'youHaventGotSometimesQuantumLeapUpgradesAnyway', name: 'you havent got sometimes quantum leap upgrades anyway', icon: '🔮🤷', cost: 2e44, costType: 'cosmicEnergy', effect: 'x5 quantum leaps', maxLevel: 1},
+            {id: 'getItRn', name: 'get it rn', icon: '⚡🔥', cost: 3e46, costType: 'cosmicEnergy', effect: 'x7 cosmic energy', multiplier: 7, maxLevel: 1},
+            {id: 'NICE', name: 'NICE!', icon: '👌', cost: 1e50, costType: 'cosmicEnergy', effect: 'Cosmic energy raised to a power of 1.05', maxLevel: 1, showBoost: true},
+            {id: 'theyAllAreAmazing', name: 'they all are amazing', icon: '🌟💫', cost: 8e52, costType: 'cosmicEnergy', effect: 'x2 cosmic energy', multiplier: 2, maxLevel: 1},
+            {id: 'finallyWorthIt', name: 'finally worth it', icon: '💯', cost: 1e54, costType: 'cosmicEnergy', effect: 'x100 cosmic energy', multiplier: 100, maxLevel: 1},
+            {id: 'notWorthIt', name: 'not worth it', icon: '🌑💯', cost: 1e57, costType: 'cosmicEnergy', effect: 'x100 dark matter', multiplier: 100, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'blackHole', name: 'Black Hole?', icon: '⚫', cost: 2e57, costType: 'cosmicEnergy', effect: 'Unlocks the Black Hole tab and starts generating black hole mass', maxLevel: 1}
+        ];
+
+        const darkMatterUpgrades = [
+            {id: 'darkEnergyInfusion', name: 'Dark Energy Infusion', icon: '🌑', cost: 3, costType: 'darkMatter', effect: '2x cosmic energy boost', multiplier: 2, maxLevel: 1},
+            {id: 'recoverBoost', name: 'Recover Boost', icon: '🔄⚡', cost: 2, costType: 'darkMatter', effect: 'x1.8 cosmic energy', multiplier: 1.8, maxLevel: 1},
+            {id: 'timeBooster', name: 'Time Booster', icon: '⏰', cost: 1.5, costType: 'darkMatter', effect: 'x2 universe age gain', multiplier: 2, maxLevel: 1, boostsTime: true},
+            {id: 'universalHarmony', name: 'Universal Harmony', icon: '🔮', cost: 5, costType: 'darkMatter', effect: '1.3x dark matter and energy', multiplier: 1.3, maxLevel: 1},
+            {id: 'voidManipulation', name: 'Void Manipulation', icon: '⚫', cost: 12, costType: 'darkMatter', effect: '2x energy generation from void', multiplier: 2, maxLevel: 1},
+            {id: 'cosmicMultiplierDM', name: 'Cosmic Energy Multiplier', icon: '✖️', cost: 20, costType: 'darkMatter', effect: 'x5 cosmic energy', multiplier: 5, maxLevel: 1},
+            {id: 'temporalDilation', name: 'Temporal Dilation Field', icon: '⏳', cost: 50, costType: 'darkMatter', effect: '2x cosmic energy + 2x age acceleration', multiplier: 2, maxLevel: 1},
+            {id: 'cosmicStorm', name: 'Cosmic Storm', icon: '⛈️', cost: 100, costType: 'darkMatter', effect: '3x energy boost from cosmic storms', multiplier: 3, maxLevel: 1},
+            {id: 'magnitudeScaling', name: 'Magnitude Scaling', icon: '📏', cost: 250, costType: 'darkMatter', effect: 'x1.15 energy per order of magnitude achieved', maxLevel: 1},
+            {id: 'researchSynergy', name: 'Research Synergy', icon: '🔬', cost: 500, costType: 'darkMatter', effect: 'x1.1 dark matter per research completed', maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'hyperspeedEvolution', name: 'Hyperspeed Evolution', icon: '🚀', cost: 3000, costType: 'darkMatter', effect: '2x cosmic energy + 2x age acceleration (stacks)', multiplier: 2, maxLevel: 1},
+            {id: 'infinityEngine', name: 'Infinity Engine', icon: '♾️', cost: 8000, costType: 'darkMatter', effect: 'Dark matter boosts itself: (dark matter^0.04)+1', maxLevel: 1, showBoost: true},
+            {id: 'darkMatterSurge', name: 'Dark Matter Surge', icon: '🌊', cost: 40000, costType: 'darkMatter', effect: '2x energy final boost', multiplier: 2, maxLevel: 1},
+            {id: 'researchSynergy2', name: 'Research Synergy.2', icon: '🔬⚡', cost: 100000, costType: 'darkMatter', effect: 'Research Synergy^0.5 also boosts Cosmic Energy', maxLevel: 1, showBoost: true},
+            {id: 'magnitude2', name: 'Magnitude.2', icon: '📐', cost: 200000, costType: 'darkMatter', effect: 'x1.05 cosmic energy per upgrade owned', maxLevel: 1, showBoost: true},
+            {id: 'synergisedEnergy', name: 'Synergised Energy', icon: '🔗', cost: 500000, costType: 'darkMatter', effect: 'Dark matter boosts cosmic energy: (dark matter^0.08)×1.2+1', maxLevel: 1, showBoost: true},
+            {id: 'improvisation', name: 'Improvisation', icon: '🎭', cost: 5000000, costType: 'darkMatter', effect: 'x5 cosmic energy boost', multiplier: 5, maxLevel: 1},
+            {id: 'galacticNetworkQ', name: 'Galactic Network?', icon: '🌌❓', cost: 50000000, costType: 'darkMatter', effect: 'x3 dark matter', multiplier: 3, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'evenMoreNetwork', name: 'Even More Network', icon: '🌌🌌', cost: 500000000, costType: 'darkMatter', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
+            {id: 'cootl', name: 'cootl', icon: '🔥', cost: 2000000000, costType: 'darkMatter', effect: 'x2 dark matter, x4 cosmic energy, x2 quantum leaps', multiplier: 4, maxLevel: 1},
+            {id: 'deserved2', name: 'Deserved.2', icon: '👑²', cost: 300000000000, costType: 'darkMatter', effect: 'Dark matter multiplier raised to the power of 1.02', maxLevel: 1, showBoost: true},
+            {id: 'simple', name: 'Simple', icon: '⚡', cost: 1000000000000, costType: 'darkMatter', effect: 'x2 cosmic energy', maxLevel: 1, multiplier: 2},
+            {id: 'bruhTooUnoriginal', name: 'Bruh Too Unoriginal', icon: '🔗🌑', cost: 15000000000000, costType: 'darkMatter', effect: 'x5 cosmic energy', maxLevel: 1, multiplier: 5},
+            {id: 'justGetIt', name: 'Just Get It', icon: '💥', cost: 69000000000000, costType: 'darkMatter', effect: 'x20 cosmic energy', maxLevel: 1, multiplier: 20},
+            {id: 'alr', name: 'alr', icon: '👌', cost: 2000000000000000, costType: 'darkMatter', effect: 'x4 cosmic energy', maxLevel: 1, multiplier: 4},
+            {id: 'pushingUpToAllInOne', name: 'pushing up to all in one', icon: '⬆️', cost: 10000000000000000, costType: 'darkMatter', effect: 'x3 cosmic energy before 1e34 cosmic energy', maxLevel: 1},
+            {id: 'leapTechnology', name: 'leap technology', icon: '🚀🔮', cost: 100000000000000000, costType: 'darkMatter', effect: 'x2 quantum leaps', maxLevel: 1},
+            {id: 'cheapScaleButGood', name: 'cheap scale but good', icon: '💰⚡', cost: 7e17, costType: 'darkMatter', effect: 'x2.5 cosmic energy', multiplier: 2.5, maxLevel: 1},
+            {id: 'continue', name: 'continue', icon: '🔄⚡', cost: 6e20, costType: 'darkMatter', effect: 'Cosmic energy boosts itself again: (energy^0.007)*2+1', maxLevel: 1, showBoost: true},
+            {id: 'scaleReduce', name: 'Scale Reduce', icon: '📉⚖️', cost: 2e23, costType: 'darkMatter', effect: 'Reduces milestone scaling: Milestone 10 = 150M, then x3 scaling (instead of 500M x10)', maxLevel: 1},
+            {id: 'boost', name: 'boost', icon: '🚀', cost: 1e23, costType: 'darkMatter', effect: 'x3 dark matter', multiplier: 3, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'ifYouEverNeedIt', name: 'if you ever need it', icon: '🆘⚡', cost: 7e24, costType: 'darkMatter', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
+            {id: 'awesomeDarkMatter', name: 'AWESOME!', icon: '🔥🌑', cost: 1e25, costType: 'darkMatter', effect: 'Dark matter raised to a power of 1.025', maxLevel: 1, showBoost: true}
+        ];
+
+        const quantumUpgrades = [
+            {id: 'quantumBoost1', name: 'Quantum Boost I', icon: '⚡', cost: 1, costType: 'quantumLeaps', effect: 'x1.5 cosmic energy and x1.5 dark matter', multiplier: 1.5, maxLevel: 1},
+            {id: 'quantumBoost2', name: 'Quantum Boost II', icon: '⚡⚡', cost: 3, costType: 'quantumLeaps', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
+            {id: 'darkMatterGen', name: 'Dark Matter Generation', icon: '🌑⚡', cost: 5, costType: 'quantumLeaps', effect: 'Generate 1% dark matter from potential reset', maxLevel: 1},
+            {id: 'unlockMilestones', name: 'Unlock Milestones', icon: '🏆', cost: 10, costType: 'quantumLeaps', effect: 'Unlock milestone system', maxLevel: 1},
+            {id: 'quantumBoost', name: 'Quantum Boost', icon: '🔮⚡', cost: 20, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', multiplier: 2, maxLevel: 1},
+            {id: 'quantumSelfBoost', name: 'Quantum Self-Enhancement', icon: '🔄', cost: 40, costType: 'quantumLeaps', effect: 'Quantum leaps boost themselves: (quantumLeaps^0.1)×2+1', maxLevel: 1, showBoost: true},
+            {id: 'quantumMechanics', name: 'Quantum Mechanics', icon: '⚛️', cost: 61, costType: 'quantumLeaps', effect: 'x2 dark matter and x2 cosmic energy', multiplier: 2, maxLevel: 1},
+            {id: 'universalRecover', name: 'Universal Recover', icon: '🔄', cost: 100, costType: 'quantumLeaps', effect: 'x10 cosmic energy but nullified upon reaching your best cosmic energy amount', maxLevel: 1, multiplier: 10},
+            {id: 'energyLeap', name: 'Energy Leap', icon: '⚡🚀', cost: 210, costType: 'quantumLeaps', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
+            {id: 'universalBuff', name: 'Universal Buff', icon: '🌟💪', cost: 400, costType: 'quantumLeaps', effect: 'x3 age acceleration and x2 cosmic energy', maxLevel: 1},
+            {id: 'bestRecordResonance', name: 'Best Record Resonance', icon: '🏆', cost: 500, costType: 'quantumLeaps', effect: 'x5 cosmic energy after Universal Recover boost is gone', maxLevel: 1, multiplier: 5},
+            {id: 'greatOne', name: 'Great One', icon: '⭐', cost: 1000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', maxLevel: 1, multiplier: 2},
+            {id: 'thisIsPeak', name: 'This is Peak', icon: '🔥⭐', cost: 1300, costType: 'quantumLeaps', effect: 'Cosmic energy boosts itself again: (energy^0.02)+1.2', maxLevel: 1, showBoost: true},
+            {id: 'ohItWasSlow', name: 'Oh It Was Slow', icon: '🌑🚀', cost: 2000, costType: 'quantumLeaps', effect: 'Improves dark matter generation to 7% and x2.5 quantum leaps', maxLevel: 1},
+            {id: 'youNeedTimewall', name: 'You Need Timewall', icon: '⏰🛡️', cost: 7000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
+            {id: 'actualTimewall', name: 'actual timewall', icon: '🛡️⏰', cost: 30000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
+            {id: 'wasThatUpgradeTooOp', name: 'was that upgrade too op?', icon: '🤔💥', cost: 60000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x1.5 dark matter', maxLevel: 1, multiplier: 2},
+            {id: 'improvementAgain', name: 'improvement again', icon: '🔥⚡', cost: 150000, costType: 'quantumLeaps', effect: 'Awesome Boost upgrade is multiplied based on cosmic energy: (log₁₀(energy)/2)', maxLevel: 1, showBoost: true},
+            {id: 'improvableBoost', name: 'Improvable Boost', icon: '📈', cost: 400000, costType: 'quantumLeaps', effect: 'x3 cosmic energy and increases by 2% for every upgrade (dust upgrades count)', maxLevel: 1, showBoost: true},
+            {id: 'dontGotAlotQuantumLeaps', name: 'dont got alot quantum leaps upgrade?', icon: '🤷‍♂️⚡', cost: 2000000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', multiplier: 2, maxLevel: 1},
+            {id: 'boostItElse', name: 'boost it else', icon: '🚀📈', cost: 2500000, costType: 'quantumLeaps', effect: '^1.4 effect of unoriginal awesome boost upgrade', maxLevel: 1, showBoost: true},
+            {id: 'energyFromSupernova', name: 'Energy from Supernova', icon: '🌟💥', cost: 30000000, costType: 'quantumLeaps', effect: 'x5 cosmic energy from supernova power', multiplier: 5, maxLevel: 1},
+            {id: 'amazingQuantumLeaps', name: 'AMAZING!', icon: '🚀🔮', cost: 100000000, costType: 'quantumLeaps', effect: 'Quantum leaps raised to a power of 1.015', maxLevel: 1, showBoost: true}
+        ];
+
+        const dustUpgrades = [
+            {id: 'sproutInspired', name: 'This is inspired by tutol sprouts mechanic', icon: '🌱', cost: 1, costType: 'dust', effect: 'Gain 2 dust (one-time)', maxLevel: 1, givesInstantDust: true},
+            {id: 'boost1', name: 'Boost I', icon: '⚡', cost: 8, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
+            {id: 'boost2', name: 'Boost II', icon: '⚡⚡', cost: 10, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
+            {id: 'boost11', name: 'Boost I.I', icon: '🌑⚡', cost: 12, costType: 'dust', effect: 'x1.3 dark matter', multiplier: 1.3, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'boost3', name: 'Boost III', icon: '⚡⚡⚡', cost: 20, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
+            {id: 'greatboost1', name: 'Great Boost I', icon: '🔮⚡', cost: 25, costType: 'dust', effect: 'x1.3 quantum leaps', multiplier: 1.3, maxLevel: 1, multipliesQuantumLeaps: true},
+            {id: 'improve', name: 'Improve Collection Time', icon: '⏰', cost: 30, costType: 'dust', effect: 'Decrease collection time to 50 minutes', maxLevel: 1},
+            {id: 'boostingReference', name: 'Boosting Reference', icon: '📖⚡', cost: 40, costType: 'dust', effect: 'Dust boosts cosmic energy: (dust/12)×1.1+1', maxLevel: 1, showBoost: true},
+            {id: 'boostingReference2', name: 'Boosting Reference II', icon: '📖🌑', cost: 40, costType: 'dust', effect: 'Dust boosts dark matter: (dust/25)^0.8+1', maxLevel: 1, showBoost: true, multipliesDarkMatter: true},
+            {id: 'boostingReference3', name: 'Boosting Reference III', icon: '📖🔮', cost: 40, costType: 'dust', effect: 'Dust boosts quantum leaps: (dust/10)^0.8/1.3+1', maxLevel: 1, showBoost: true, multipliesQuantumLeaps: true},
+            {id: 'thisCanBeGenerated', name: 'this can be generated?', icon: '✨🔧', cost: 50, costType: 'dust', effect: 'Generate dust at rate of 0.001 per second', maxLevel: 1}
+        ];
+
+        const blackHoleUpgrades = [
+            {id: 'eventHorizonExpansion', name: 'Event Horizon Expansion', icon: '🌀', cost: 10, costType: 'blackHoleMass', effect: 'x2 black hole mass generation', multiplier: 2, maxLevel: 1},
+            {id: 'quantumFoam', name: 'Quantum Foam Absorption', icon: '⚛️', cost: 50, costType: 'blackHoleMass', effect: 'x3 black hole mass generation', multiplier: 3, maxLevel: 1},
+            {id: 'darkMatterAccretion', name: 'Dark Matter Accretion', icon: '🌑', cost: 250, costType: 'blackHoleMass', effect: 'x5 black hole mass generation', multiplier: 5, maxLevel: 1},
+            {id: 'stellarDevouring', name: 'Stellar Devouring', icon: '⭐', cost: 1000, costType: 'blackHoleMass', effect: 'x10 black hole mass generation', multiplier: 10, maxLevel: 1},
+            {id: 'galacticConsumption', name: 'Galactic Consumption', icon: '🌌', cost: 5000, costType: 'blackHoleMass', effect: 'x25 black hole mass generation', multiplier: 25, maxLevel: 1},
+            {id: 'universeCollapse', name: 'Universe Collapse', icon: '💥', cost: 25000, costType: 'blackHoleMass', effect: 'x100 black hole mass generation', multiplier: 100, maxLevel: 1}
+        ];
+
+        // Milestone definitions - dynamically calculated
+        function getMilestoneRequirement(index) {
+            const baseRequirements = [10, 100, 1000, 10000, 100000, 500000, 2000000, 10000000, 50000000];
+            
+            if (index < 9) {
+                return baseRequirements[index];
+            }
+            
+            // For milestone 10 and beyond, check if Scale Reduce is purchased
+            const scaleReduceLevel = gameState.upgrades['scaleReduce'] || 0;
+            if (scaleReduceLevel > 0) {
+                // Milestone 10 becomes 150M, then scale by x3
+                if (index === 9) return 150000000; // 150M
+                return 150000000 * Math.pow(3, index - 9);
+            } else {
+                // Default scaling without upgrade - much higher
+                if (index === 9) return 500000000; // 500M
+                return 500000000 * Math.pow(10, index - 9);
+            }
+        }
+        
+        function getMilestoneRequirements() {
+            return Array.from({length: 20}, (_, i) => getMilestoneRequirement(i));
+        }
+        const milestoneEffects = [
+            'Dark matter generation improved to 3%',           // Milestone 1
+            'x1.5 cosmic energy boost',                        // Milestone 2  
+            'x1.2 dark matter per milestone (starting from milestone 2)', // Milestone 3
+            'x1.5 cosmic energy boost',                        // Milestone 4
+            'x2 quantum leaps (one-time boost)',               // Milestone 5 (was 6)
+            'x1.5 dark matter',                                // Milestone 6 (was 7)
+            'x1.2 quantum leaps per milestone (starting from milestone 5)', // Milestone 7 (was 8)
+            'Dark matter generation improved to 15%',          // Milestone 8 (was 9)
+            'x1.5 cosmic energy boost',                        // Milestone 9 (new)
+            'x2 cosmic energy and x2 dark matter',             // Milestone 10
+            'x1.3 quantum leap gain multiplier',               // Milestone 11
+            'x1.5 cosmic energy boost',                        // Milestone 12
+            'x2 dark matter boost',                            // Milestone 13
+            'x1.5 all resource generation',                    // Milestone 14
+            'x2 cosmic energy boost',                          // Milestone 15
+            'x1.4 quantum leap gain multiplier',               // Milestone 16
+            'x3 dark matter boost',                            // Milestone 17
+            'x2 all resource generation',                      // Milestone 18
+            'x5 cosmic energy boost',                          // Milestone 19
+            'x10 all resources (ultimate milestone)'           // Milestone 20
+        ];
+
+        // Initialize stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                // Make some stars brighter
+                if (Math.random() < 0.2) {
+                    star.classList.add('bright');
+                }
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = star.style.height = (Math.random() * 3 + 1) + 'px';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Format numbers with support up to 1e600, special formatting for quantum leaps and black hole mass
+        function formatNumber(num, isQuantumLeaps = false, isBlackHoleMass = false) {
+            // Handle special cases
+            if (!isFinite(num) || isNaN(num)) return '0.00';
+            if (num < 0) return '-' + formatNumber(-num, isQuantumLeaps, isBlackHoleMass);
+            if (num === 0) return isQuantumLeaps ? '0' : '0.00';
+            
+            // Special formatting for black hole mass
+            if (isBlackHoleMass) {
+                const unit = gameState.blackHoleUnit || 'grams';
+                
+                if (num < 1000) {
+                    return num.toFixed(2) + ' ' + unit;
+                } else if (num < 1000000) {
+                    return (num / 1000).toFixed(2) + ' K' + unit;
+                } else if (num < 1000000000) {
+                    return (num / 1000000).toFixed(2) + ' M' + unit;
+                } else if (num < 1000000000000) {
+                    return (num / 1000000000).toFixed(2) + ' B' + unit;
+                } else if (num < 1000000000000000) {
+                    return (num / 1000000000000).toFixed(2) + ' T' + unit;
+                }
+                
+                // Scientific notation for very large black hole mass
+                if (!gameState.shownBlackHoleScientificNotification && num >= 1000000000000000) {
+                    gameState.shownBlackHoleScientificNotification = true;
+                    showNotification('⚫ BLACK HOLE NOTATION: Black Hole mass now uses scientific notation (e.g., 1.50e15 grams)');
+                }
+                
+                const exponent = Math.floor(Math.log10(num));
+                const mantissa = num / Math.pow(10, exponent);
+                return mantissa.toFixed(2) + 'e' + exponent + ' ' + unit;
+            }
+            
+            // Special formatting for quantum leaps
+            if (isQuantumLeaps) {
+                if (num < 1000) return Math.floor(num).toString();
+                if (num < 1000000) return (num / 1000).toFixed(2) + 'K';
+                if (num < 1000000000) return (num / 1000000).toFixed(2) + 'M';
+                if (num < 1000000000000) return (num / 1000000000).toFixed(2) + 'B';
+                if (num < 1000000000000000) {
+                    const trillions = num / 1000000000000;
+                    if (trillions >= 1 && !gameState.shownQuantumScientificNotification) {
+                        gameState.shownQuantumScientificNotification = true;
+                        showNotification('🔮 QUANTUM BREAKTHROUGH: 1 Trillion Quantum Leaps achieved! Reality itself bends to your will!');
+                    }
+                    return trillions.toFixed(2) + 'T';
+                }
+                
+                // Scientific notation for quantum leaps above 1000T
+                if (!gameState.shownQuantumScientificNotationChange) {
+                    gameState.shownQuantumScientificNotationChange = true;
+                    showNotification('🔬 QUANTUM NOTATION: Quantum Leap amounts now use scientific notation (e.g., 1.50e15)');
+                }
+                const exponent = Math.floor(Math.log10(num));
+                const mantissa = num / Math.pow(10, exponent);
+                return mantissa.toFixed(2) + 'e' + exponent;
+            }
+            
+            // Standard formatting for other numbers
+            if (num < 1000) return num.toFixed(2);
+            if (num < 1000000) return (num / 1000).toFixed(2) + 'K';
+            if (num < 1000000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num < 1000000000000) return (num / 1000000000).toFixed(2) + 'B';
+            if (num < 1000000000000000) return (num / 1000000000000).toFixed(2) + 'T';
+            
+            // Scientific notation for numbers >= 1 quadrillion
+            if (!gameState.shownScientificNotification && num >= 1000000000000000) {
+                gameState.shownScientificNotification = true;
+                showNotification('🔬 SCIENTIFIC NOTATION: Numbers too large! Switching to scientific notation (e.g., 1.50e15)');
+            }
+            
+            // Enhanced scientific notation with proper formatting
+            const exponent = Math.floor(Math.log10(num));
+            const mantissa = num / Math.pow(10, exponent);
+            
+            // Handle very large exponents (beyond normal JavaScript limits)
+            if (exponent >= 308) {
+                return mantissa.toFixed(2) + 'e' + exponent;
+            }
+            
+            return num.toExponential(2);
+        }
+
+        // Show notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+
+        // Dust collection system
+        function getDustCollectionTime() {
+            const improveLevel = gameState.upgrades['improve'] || 0;
+            return improveLevel > 0 ? 50 * 60 * 1000 : 60 * 60 * 1000; // 50 or 60 minutes in milliseconds
+        }
+
+        function getDustGain() {
+            return 10 + Math.floor(gameState.dustCollections / 10) * 2;
+        }
+
+        function canCollectDust() {
+            const currentTime = Date.now();
+            const collectionTime = getDustCollectionTime();
+            return currentTime - gameState.lastDustCollection >= collectionTime;
+        }
+
+        function getDustTimer() {
+            const currentTime = Date.now();
+            const collectionTime = getDustCollectionTime();
+            const timeSinceLastCollection = currentTime - gameState.lastDustCollection;
+            const timeRemaining = Math.max(0, collectionTime - timeSinceLastCollection);
+            
+            const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+            
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function collectDust() {
+            if (!canCollectDust()) {
+                showNotification('Dust not ready to collect yet!');
+                return;
+            }
+            
+            const dustGain = getDustGain();
+            gameState.dust += dustGain;
+            gameState.dustCollections += 1;
+            gameState.lastDustCollection = Date.now();
+            
+            showNotification(`✨ Collected ${dustGain} Dust! (Collection #${gameState.dustCollections})`);
+            updateDisplay();
+            updateUpgradeDisplay();
+        }
+
+        // Calculate dark matter gain
+        function calculateDarkMatterGain() {
+            let baseDarkMatter = Math.pow(gameState.cosmicEnergy, 0.13) + 1;
+            
+            // Apply dark matter multipliers to stellar collapse gains
+            const { energyMultiplier, darkMatterMultiplier } = calculateMultipliers();
+            return baseDarkMatter * darkMatterMultiplier;
+        }
+
+        // Calculate quantum leap gain
+        function calculateQuantumLeapGain() {
+            let baseQuantum = Math.pow(gameState.darkMatter, 0.1) + 1;
+            
+            // Apply milestone 5 (x2 quantum leaps one-time boost)
+            let milestoneCount = 0;
+            for (let i = 0; i < gameState.milestones.length; i++) {
+                if (gameState.milestones[i]) {
+                    milestoneCount++;
+                }
+            }
+            
+            // Milestone 5 gives x2 quantum leaps (one-time boost)
+            if (milestoneCount >= 5) {
+                baseQuantum *= 2;
+            }
+            
+            // Milestone 7+ gives x1.2 quantum leaps per milestone starting from milestone 5
+            if (milestoneCount >= 7) {
+                const quantumMilestoneCount = milestoneCount - 4; // Start counting from milestone 5
+                baseQuantum *= Math.pow(1.2, quantumMilestoneCount);
+            }
+            
+            // Apply quantum self-boost if purchased
+            const quantumSelfBoostLevel = gameState.upgrades['quantumSelfBoost'] || 0;
+            if (quantumSelfBoostLevel > 0 && gameState.quantumLeaps > 0) {
+                const selfBoost = Math.pow(gameState.quantumLeaps, 0.1) * 2 + 1;
+                baseQuantum *= selfBoost;
+            }
+            
+            // Apply AMAZING! upgrade - raises quantum leap gains to ^1.015
+            const amazingQuantumLeapsLevel = gameState.upgrades['amazingQuantumLeaps'] || 0;
+            if (amazingQuantumLeapsLevel > 0) {
+                baseQuantum = Math.pow(Math.max(baseQuantum, 1), 1.015);
+            }
+            
+            // Apply Infinity Engine.3 boost if purchased
+            const infinityEngine3Level = gameState.upgrades['infinityEngine3'] || 0;
+            if (infinityEngine3Level > 0) {
+                // Check if Infinity Engine is owned to get the boost
+                const infinityEngineLevel = gameState.upgrades['infinityEngine'] || 0;
+                if (infinityEngineLevel > 0) {
+                    const infinityEngineBoost = Math.pow(gameState.darkMatter, 0.04) + 1;
+                    const quantumBoost = Math.pow(infinityEngineBoost, 0.2) * 2;
+                    baseQuantum *= quantumBoost;
+                }
+            }
+            
+            // Apply Quantum Energy boost if purchased
+            const quantumEnergyLevel = gameState.upgrades['quantumEnergy'] || 0;
+            if (quantumEnergyLevel > 0) {
+                baseQuantum *= 1.5;
+            }
+            
+            // Apply Price Leap boost if purchased
+            const priceLeapLevel = gameState.upgrades['priceLeap'] || 0;
+            if (priceLeapLevel > 0) {
+                baseQuantum *= 1.5;
+            }
+            
+            // Apply "Oh It Was Slow" boost if purchased
+            const ohItWasSlowLevel = gameState.upgrades['ohItWasSlow'] || 0;
+            if (ohItWasSlowLevel > 0) {
+                baseQuantum *= 2.5;
+            }
+            
+            // Apply "cootl" quantum leap boost if purchased
+            const cootlLevel = gameState.upgrades['cootl'] || 0;
+            if (cootlLevel > 0) {
+                baseQuantum *= 2; // x2 quantum leaps
+            }
+            
+            // Apply "all in one" upgrade effects
+            const allInOneLevel = gameState.upgrades['allInOne'] || 0;
+            if (allInOneLevel > 0) {
+                // Base x1.2 multiplier
+                baseQuantum *= 1.2;
+                
+                // Time boosts quantum leaps: (time/20k)^0.55/9+1
+                const timeBoost = Math.pow(gameState.universeAge / 20000, 0.55) / 9 + 1;
+                baseQuantum *= timeBoost;
+                
+                // Quantum leaps self-boost: (quantumLeaps^0.006)+1
+                const quantumSelfBoost = Math.pow(Math.max(gameState.quantumLeaps, 1), 0.006) + 1;
+                baseQuantum *= quantumSelfBoost;
+                
+                // ^1.005 base multiplier
+                baseQuantum = Math.pow(baseQuantum, 1.005);
+                
+                // x1.01 per 2 OOMs of cosmic energy
+                const energyOOMs = Math.log10(Math.max(gameState.cosmicEnergy, 1));
+                const twoOOMBonus = Math.floor(energyOOMs / 2);
+                if (twoOOMBonus > 0) {
+                    baseQuantum *= Math.pow(1.01, twoOOMBonus);
+                }
+            }
+            
+            // Apply "leap technology" boost if purchased
+            const leapTechnologyLevel = gameState.upgrades['leapTechnology'] || 0;
+            if (leapTechnologyLevel > 0) {
+                baseQuantum *= 2;
+            }
+            
+            // Apply "you havent got sometimes quantum leap upgrades anyway" boost if purchased
+            const youHaventGotLevel = gameState.upgrades['youHaventGotSometimesQuantumLeapUpgradesAnyway'] || 0;
+            if (youHaventGotLevel > 0) {
+                baseQuantum *= 5;
+            }
+            
+            // Apply Boosting Reference III boost if purchased
+            const boostingReference3Level = gameState.upgrades['boostingReference3'] || 0;
+            if (boostingReference3Level > 0) {
+                const dustBoost = Math.pow(gameState.dust / 10, 0.8) / 1.3 + 1;
+                baseQuantum *= dustBoost;
+            }
+            
+            // Apply dust upgrades for quantum leaps
+            const greatboost1Level = gameState.upgrades['greatboost1'] || 0;
+            if (greatboost1Level > 0) {
+                baseQuantum *= 1.3;
+            }
+            
+            return Math.floor(baseQuantum);
+        }
+
+        // Calculate black hole mass generation
+        function calculateBlackHoleMassGeneration() {
+            if (!gameState.blackHoleUnlocked) return 0;
+            
+            let baseGeneration = 1; // 1 gram per second base
+            
+            // Apply log10(cosmic energy * dark matter) multiplier
+            const energyDMProduct = gameState.cosmicEnergy * gameState.darkMatter;
+            const logMultiplier = Math.max(1, Math.log10(Math.max(energyDMProduct, 1)));
+            baseGeneration *= logMultiplier;
+            
+            // Apply black hole upgrades
+            for (let upgrade of blackHoleUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    baseGeneration *= Math.pow(upgrade.multiplier, level);
+                }
+            }
+            
+            return baseGeneration;
+        }
+
+        // Big Bang reset
+        function performBigBangReset() {
+            const now = Date.now();
+            
+            // Reset click counter if more than 10 seconds have passed
+            if (now - gameState.bigBangLastClick > 10000) {
+                gameState.bigBangClicks = 0;
+            }
+            
+            gameState.bigBangClicks++;
+            gameState.bigBangLastClick = now;
+            
+            if (gameState.bigBangClicks < 5) {
+                showNotification(`Big Bang Reset requires ${5 - gameState.bigBangClicks} more clicks within 10 seconds!`);
+                return;
+            }
+            
+            // Reset click counter
+            gameState.bigBangClicks = 0;
+            
+            // Reset all resources (except dust which is immune)
+            gameState.cosmicEnergy = 1;
+            gameState.energyGeneration = 1;
+            gameState.universeAge = 0;
+            gameState.darkMatter = 0;
+            gameState.quantumLeaps = 0;
+            gameState.totalQuantumLeaps = 0;
+            gameState.darkMatterGeneration = 0;
+            gameState.blackHoleUnlocked = false;
+            gameState.blackHoleMass = 1;
+            gameState.blackHoleUnit = 'grams';
+            // Note: dust, dustCollections, and lastDustCollection are preserved
+            
+            // Reset all upgrades except dust upgrades
+            const dustUpgradeIds = dustUpgrades.map(u => u.id);
+            const preservedUpgrades = {};
+            for (const upgradeId of dustUpgradeIds) {
+                if (gameState.upgrades[upgradeId]) {
+                    preservedUpgrades[upgradeId] = gameState.upgrades[upgradeId];
+                }
+            }
+            gameState.upgrades = preservedUpgrades;
+            
+            // Reset milestones
+            gameState.milestones = [];
+            
+            // Hide advanced tabs and buttons
+            document.querySelector('[data-tab="dark-matter"]').style.display = 'none';
+            document.querySelector('[data-tab="quantum"]').style.display = 'none';
+            document.querySelector('[data-tab="black-hole"]').style.display = 'none';
+            document.getElementById('stellarCollapse').style.display = 'none';
+            document.getElementById('quantumLeap').style.display = 'none';
+            
+            // Switch back to cosmic research tab
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(tc => tc.classList.remove('active'));
+            document.querySelector('[data-tab="cosmic-research"]').classList.add('active');
+            document.getElementById('cosmic-research').classList.add('active');
+            
+            showNotification('Complete Universe Reset! Big Bang initiated!');
+            updateDisplay();
+            updateUpgradeDisplay();
+            updateMilestones();
+        }
+
+        // Dark matter reset
+        function performDarkMatterReset() {
+            const now = Date.now();
+            
+            // Reset click counter if more than 10 seconds have passed
+            if (now - gameState.darkMatterResetLastClick > 10000) {
+                gameState.darkMatterResetClicks = 0;
+            }
+            
+            gameState.darkMatterResetClicks = (gameState.darkMatterResetClicks || 0) + 1;
+            gameState.darkMatterResetLastClick = now;
+            
+            if (gameState.darkMatterResetClicks < 3) {
+                showNotification(`Dark Matter Reset requires ${3 - gameState.darkMatterResetClicks} more clicks within 10 seconds!`);
+                return;
+            }
+            
+            // Reset click counter
+            gameState.darkMatterResetClicks = 0;
+            
+            // Store permanent upgrades before reset
+            const scaleReduceLevel = gameState.upgrades['scaleReduce'] || 0;
+            
+            // Reset dark matter and its upgrades only
+            gameState.darkMatter = 0;
+            
+            // Reset only dark matter upgrades
+            for (let upgrade of darkMatterUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            
+            // Restore permanent upgrades
+            if (scaleReduceLevel > 0) {
+                gameState.upgrades['scaleReduce'] = scaleReduceLevel;
+            }
+            
+            showNotification('Dark Matter Reset Complete! Dark matter and upgrades reset.');
+            updateDisplay();
+            updateUpgradeDisplay();
+        }
+        function performStellarCollapse() {
+            if (gameState.cosmicEnergy < 500000) {
+                showNotification('Need 500K Cosmic Energy to perform Stellar Collapse!');
+                return;
+            }
+            
+            const darkMatterGain = calculateDarkMatterGain();
+            gameState.darkMatter += darkMatterGain;
+            gameState.cosmicEnergy = 1;
+            gameState.energyGeneration = 1;
+            gameState.universeAge = 0;
+            
+            // Store permanent upgrades before reset
+            const scaleReduceLevel = gameState.upgrades['scaleReduce'] || 0;
+            
+            // Reset cosmic upgrades but keep dark matter upgrades
+            for (let upgrade of cosmicUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            
+            // Restore permanent upgrades
+            if (scaleReduceLevel > 0) {
+                gameState.upgrades['scaleReduce'] = scaleReduceLevel;
+            }
+            
+            showNotification(`Stellar Collapse Complete! Gained ${formatNumber(darkMatterGain)} Dark Matter`);
+            updateDisplay();
+            updateUpgradeDisplay();
+        }
+
+        // Quantum leap
+        function performQuantumLeap() {
+            if (gameState.darkMatter < 50000) {
+                showNotification('Need 50K Dark Matter to perform Quantum Leap!');
+                return;
+            }
+            
+            const quantumGain = calculateQuantumLeapGain();
+            gameState.quantumLeaps += quantumGain;
+            gameState.totalQuantumLeaps += quantumGain;
+            
+            // Check milestones
+            updateMilestones();
+            
+            // Store permanent upgrades before reset
+            const scaleReduceLevel = gameState.upgrades['scaleReduce'] || 0;
+            
+            // Reset everything except quantum upgrades
+            gameState.cosmicEnergy = 1;
+            gameState.energyGeneration = 1;
+            gameState.universeAge = 0;
+            gameState.darkMatter = 0;
+            
+            // Reset cosmic and dark matter upgrades
+            for (let upgrade of cosmicUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            for (let upgrade of darkMatterUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            
+            // Restore permanent upgrades
+            if (scaleReduceLevel > 0) {
+                gameState.upgrades['scaleReduce'] = scaleReduceLevel;
+            }
+            
+            showNotification(`Quantum Leap! Gained ${quantumGain} Quantum Leaps`);
+            updateDisplay();
+            updateUpgradeDisplay();
+        }
+
+        // Play purchase sound
+        function playPurchaseSound() {
+            try {
+                // Create a simple beep sound using Web Audio API
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1200, audioContext.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                // Silently fail if audio context is not available
+                console.log('Audio not available');
+            }
+        }
+
+        // Play special epic sound for "all in one" upgrade
+        function playEpicSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // Create a dramatic ascending chord progression
+                const frequencies = [261.63, 329.63, 392.00, 523.25]; // C, E, G, C (major chord)
+                const duration = 0.8;
+                
+                frequencies.forEach((freq, index) => {
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(freq * 1.5, audioContext.currentTime + duration);
+                    
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime + index * 0.1);
+                    gainNode.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + index * 0.1 + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                    
+                    oscillator.start(audioContext.currentTime + index * 0.1);
+                    oscillator.stop(audioContext.currentTime + duration);
+                });
+            } catch (e) {
+                console.log('Epic audio not available');
+            }
+        }
+
+        // Buy upgrade
+        function buyUpgrade(upgradeArray, upgradeId) {
+            const upgrade = upgradeArray.find(u => u.id === upgradeId);
+            if (!upgrade) return;
+            
+            const currentLevel = gameState.upgrades[upgradeId] || 0;
+            let cost = upgrade.cost;
+            
+            // Handle scaling costs for repeatable upgrades only
+            if (upgrade.repeatable) {
+                cost = Math.floor(upgrade.cost * Math.pow(1.15, currentLevel));
+            }
+            
+            const currency = gameState[upgrade.costType === 'cosmicEnergy' ? 'cosmicEnergy' : 
+                                    upgrade.costType === 'darkMatter' ? 'darkMatter' : 
+                                    upgrade.costType === 'dust' ? 'dust' : 
+                                    upgrade.costType === 'quantumLeaps' ? 'quantumLeaps' : 
+                                    upgrade.costType === 'blackHoleMass' ? 'blackHoleMass' : 0];
+            
+            if (currency >= cost && currentLevel < upgrade.maxLevel) {
+                if (upgrade.costType === 'cosmicEnergy') gameState.cosmicEnergy -= cost;
+                else if (upgrade.costType === 'darkMatter') gameState.darkMatter -= cost;
+                else if (upgrade.costType === 'dust') gameState.dust -= cost;
+                else if (upgrade.costType === 'quantumLeaps') gameState.quantumLeaps -= cost;
+                else if (upgrade.costType === 'blackHoleMass') gameState.blackHoleMass -= cost;
+                
+                gameState.upgrades[upgradeId] = currentLevel + 1;
+                
+                // Special effects for specific upgrades
+                if (upgradeId === 'blackHole') {
+                    gameState.blackHoleUnlocked = true;
+                    document.querySelector('[data-tab="black-hole"]').style.display = 'block';
+                    showNotification('⚫ BLACK HOLE UNLOCKED: A new dimension of power awaits!');
+                }
+                
+                // Play special sound for "all in one" upgrade, regular sound for others
+                if (upgradeId === 'allInOne') {
+                    playEpicSound();
+                } else {
+                    playPurchaseSound();
+                }
+                
+                // Special effects
+                if (upgradeId === 'unlockMilestones') {
+                    updateMilestones();
+                } else if (upgradeId === 'sproutInspired') {
+                    // Give instant dust reward
+                    gameState.dust += 2;
+                    showNotification(`🌱 Sprouted! Gained 2 additional dust!`);
+                }
+                
+                showNotification(`Purchased ${upgrade.name}!`);
+                updateDisplay();
+                updateUpgradeDisplay();
+            }
+        }
+
+        // Calculate multipliers
+        function calculateMultipliers() {
+            let energyMultiplier = 1;
+            let darkMatterMultiplier = 1;
+            let quantumLeapMultiplier = 1;
+            
+            // Cosmic upgrades
+            for (let upgrade of cosmicUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    if (upgrade.multipliesDarkMatter) {
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    }
+                }
+            }
+            
+            // Special cosmic upgrades with formulas
+            const cosmicMultiplierLevel = gameState.upgrades['cosmicMultiplier'] || 0;
+            if (cosmicMultiplierLevel > 0) {
+                if (gameState.cosmicEnergy < 250000000) {
+                    energyMultiplier *= 5;
+                } else {
+                    energyMultiplier *= 3;
+                }
+            }
+            
+            const energyBoostsDarkMatterLevel = gameState.upgrades['energyBoostsDarkMatter'] || 0;
+            if (energyBoostsDarkMatterLevel > 0) {
+                const boost = Math.pow(gameState.cosmicEnergy, 0.08) / 1.3 + 1;
+                darkMatterMultiplier *= boost;
+            }
+            
+            const timeBoostsDarkMatterLevel = gameState.upgrades['timeBoostsDarkMatter'] || 0;
+            if (timeBoostsDarkMatterLevel > 0) {
+                if (gameState.cosmicEnergy >= 10000000000) { // 10B+ softcap
+                    const boost = Math.pow(gameState.universeAge / 500, 0.8) + 1;
+                    darkMatterMultiplier *= boost;
+                } else {
+                    const boost = Math.pow(gameState.universeAge / 450, 0.87) + 1;
+                    darkMatterMultiplier *= boost;
+                }
+            }
+            
+            const energyBoostsItselfLevel = gameState.upgrades['energyBooststself'] || 0;
+            if (energyBoostsItselfLevel > 0) {
+                const energyBoostBaseLevel = gameState.upgrades['energyBoostBase'] || 0;
+                let baseExponent = 0.04; // Default base
+                if (energyBoostBaseLevel > 0) {
+                    baseExponent = 0.06; // Upgraded base
+                }
+                const boost = Math.pow(Math.pow(gameState.cosmicEnergy, baseExponent), 1.05) + 1;
+                energyMultiplier *= boost;
+            }
+            
+            const priceLeapLevel = gameState.upgrades['priceLeap'] || 0;
+            if (priceLeapLevel > 0) {
+                energyMultiplier *= 1.5;
+                darkMatterMultiplier *= 1.5;
+            }
+            
+            const awesomeBoostLevel = gameState.upgrades['awesomeBoost'] || 0;
+            if (awesomeBoostLevel > 0) {
+                let awesomeBoost = Math.log10(Math.max(gameState.cosmicEnergy, 1)) + 1;
+                
+                // Apply "improvement again" multiplier if purchased
+                const improvementAgainLevel = gameState.upgrades['improvementAgain'] || 0;
+                if (improvementAgainLevel > 0) {
+                    const improvementMultiplier = Math.log10(Math.max(gameState.cosmicEnergy, 1)) / 2;
+                    awesomeBoost *= improvementMultiplier;
+                }
+                
+                energyMultiplier *= awesomeBoost;
+            }
+            
+            const unoriginalAwesomeBoostLevel = gameState.upgrades['unoriginalAwesomeBoost'] || 0;
+            if (unoriginalAwesomeBoostLevel > 0) {
+                let boost = Math.log(Math.max(gameState.cosmicEnergy, 1)) / Math.log(100) / 5 + 1;
+                
+                // Apply "boost it else" power boost if purchased
+                const boostItElseLevel = gameState.upgrades['boostItElse'] || 0;
+                if (boostItElseLevel > 0) {
+                    boost = Math.pow(boost, 1.4);
+                }
+                
+                energyMultiplier *= boost;
+                
+                // Really Fake Upgrade makes this boost also apply to dark matter
+                const reallyFakeUpgradeLevel = gameState.upgrades['reallyFakeUpgrade'] || 0;
+                if (reallyFakeUpgradeLevel > 0) {
+                    darkMatterMultiplier *= boost;
+                }
+            }
+            
+            const synergisedEnergyLevel = gameState.upgrades['synergisedEnergy'] || 0;
+            if (synergisedEnergyLevel > 0) {
+                const boost = Math.pow(gameState.darkMatter, 0.08) * 1.2 + 1;
+                energyMultiplier *= boost;
+            }
+            
+            // Dark matter upgrades
+            for (let upgrade of darkMatterUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0) {
+                    if (upgrade.multiplier) {
+                        if (upgrade.id === 'universalHarmony') {
+                            energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                            darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                        } else if (upgrade.id === 'cosmicMultiplierDM') {
+                            energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        } else                         if (upgrade.multipliesDarkMatter) {
+                            darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                        } else {
+                            energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        }
+                    }
+                }
+            }
+            
+            // Special dark matter upgrades with formulas
+            const infinityEngineLevel = gameState.upgrades['infinityEngine'] || 0;
+            if (infinityEngineLevel > 0) {
+                const boost = Math.pow(gameState.darkMatter, 0.04) + 1;
+                darkMatterMultiplier *= boost;
+            }
+            
+            const magnitude2Level = gameState.upgrades['magnitude2'] || 0;
+            if (magnitude2Level > 0) {
+                let totalUpgrades = 0;
+                [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades].forEach(u => {
+                    totalUpgrades += gameState.upgrades[u.id] || 0;
+                });
+                const boost = Math.pow(1.05, totalUpgrades);
+                energyMultiplier *= boost;
+            }
+            
+            // Research Synergy special handling - moved outside the loop for clarity
+            const researchSynergyLevel = gameState.upgrades['researchSynergy'] || 0;
+            if (researchSynergyLevel > 0) {
+                let completedResearch = 0;
+                [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades].forEach(u => {
+                    if (gameState.upgrades[u.id] > 0) completedResearch++;
+                });
+                const researchBonus = Math.pow(1.1, completedResearch);
+                darkMatterMultiplier *= researchBonus;
+                
+                // Research Synergy.2 effect
+                const researchSynergy2Level = gameState.upgrades['researchSynergy2'] || 0;
+                if (researchSynergy2Level > 0) {
+                    const energyBonus = Math.pow(researchBonus, 0.5);
+                    energyMultiplier *= energyBonus;
+                }
+            }
+            
+            const pushingUpLevel = gameState.upgrades['pushingUpToAllInOne'] || 0;
+            if (pushingUpLevel > 0 && gameState.cosmicEnergy < 1e34) {
+                energyMultiplier *= 3;
+            }
+            
+            const continueLevel = gameState.upgrades['continue'] || 0;
+            if (continueLevel > 0) {
+                const continueBoost = Math.pow(gameState.cosmicEnergy, 0.005) + 1;
+                energyMultiplier *= continueBoost;
+            }
+            
+            // Quantum upgrades
+            for (let upgrade of quantumUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    if (upgrade.id === 'quantumBoost1') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'quantumBoost') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'quantumMechanics') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'energyLeap') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'universalBuff') {
+                        energyMultiplier *= 2; // x2 cosmic energy from Universal Buff
+                    } else if (upgrade.id === 'universalRecover') {
+                        // Only apply boost if current energy is less than best energy
+                        if (gameState.cosmicEnergy < gameState.bestCosmicEnergy) {
+                            energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        }
+                    } else if (upgrade.id === 'bestRecordResonance') {
+                        // Only apply boost if current energy is >= best energy (Universal Recover is gone)
+                        if (gameState.cosmicEnergy >= gameState.bestCosmicEnergy) {
+                            energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        }
+                    } else if (upgrade.id === 'greatOne') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'youNeedTimewall') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'wasThatUpgradeTooOp') {
+                        energyMultiplier *= Math.pow(2, level); // x2 cosmic energy
+                        darkMatterMultiplier *= Math.pow(1.5, level); // x1.5 dark matter
+                    } else if (upgrade.id === 'dontGotAlotQuantumLeaps') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    }
+                }
+            }
+            
+            // Dust upgrades
+            for (let upgrade of dustUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    if (upgrade.multipliesDarkMatter) {
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.multipliesQuantumLeaps) {
+                        quantumLeapMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    }
+                }
+            }
+            
+            // Special dust upgrade formulas
+            const boostingReferenceLevel = gameState.upgrades['boostingReference'] || 0;
+            if (boostingReferenceLevel > 0) {
+                const dustBoost = (gameState.dust / 12) * 1.1 + 1;
+                energyMultiplier *= dustBoost;
+            }
+            
+            const boostingReference2Level = gameState.upgrades['boostingReference2'] || 0;
+            if (boostingReference2Level > 0) {
+                const dustBoost = Math.pow(gameState.dust / 25, 0.8) + 1;
+                darkMatterMultiplier *= dustBoost;
+            }
+            
+            // Black hole boosts
+            if (gameState.blackHoleUnlocked && gameState.blackHoleMass > 0) {
+                // Calculate black hole mass in grams for formula
+                let massInGrams = gameState.blackHoleMass;
+                if (gameState.blackHoleUnit === 'kilograms') {
+                    massInGrams = gameState.blackHoleMass * 1000;
+                }
+                
+                // Apply black hole boosts
+                const cosmicBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(6), 1.5);
+                const darkMatterBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(8), 1.3);
+                const quantumBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(10), 1.1);
+                
+                energyMultiplier *= cosmicBoost;
+                darkMatterMultiplier *= darkMatterBoost;
+                quantumLeapMultiplier *= quantumBoost;
+            }
+            
+            // Milestone effects (only affect cosmic energy)
+            let milestoneCount = 0;
+            for (let i = 0; i < gameState.milestones.length; i++) {
+                if (gameState.milestones[i]) {
+                    milestoneCount++;
+                }
+            }
+            
+            // First milestone doesn't count for energy boost, only improves dark matter generation
+            if (milestoneCount > 1) {
+                energyMultiplier *= Math.pow(1.5, milestoneCount - 1);
+            }
+            
+            // Milestone 3+ gives dark matter boost: x1.2 per milestone starting from milestone 2
+            if (milestoneCount >= 3) {
+                const darkMatterMilestoneCount = milestoneCount - 1; // Start counting from milestone 2
+                darkMatterMultiplier *= Math.pow(1.2, darkMatterMilestoneCount);
+            }
+            
+            // Milestone 6 (was 7) gives x1.5 dark matter
+            if (milestoneCount >= 6) {
+                darkMatterMultiplier *= 1.5;
+            }
+            
+            // Temporal acceleration effects
+            const temporalLevel = gameState.upgrades['temporalAcceleration'] || 0;
+            if (temporalLevel > 0) {
+                energyMultiplier *= (gameState.universeAge / 100) + 1;
+            }
+            
+            const timeDistortionLevel = gameState.upgrades['timeDistortionField'] || 0;
+            if (timeDistortionLevel > 0) {
+                if (gameState.cosmicEnergy >= 10000000000) { // 10B+ softcap
+                    energyMultiplier *= Math.pow(gameState.universeAge / 75, 0.84) / 1.2 + 1;
+                } else {
+                    energyMultiplier *= Math.pow(gameState.universeAge / 50, 0.95) + 1;
+                }
+            }
+            
+            // Apply "Deserved.2" upgrade - raises the entire dark matter multiplier to ^1.02
+            const deserved2Level = gameState.upgrades['deserved2'] || 0;
+            if (deserved2Level > 0) {
+                darkMatterMultiplier = Math.pow(Math.max(darkMatterMultiplier, 1), 1.02);
+            }
+            
+            // Apply "NICE!" upgrade - raises the entire energy multiplier to ^1.05
+            const niceLevel = gameState.upgrades['NICE'] || 0;
+            if (niceLevel > 0) {
+                energyMultiplier = Math.pow(Math.max(energyMultiplier, 1), 1.05);
+            }
+            
+            // Apply "That's Definitely Good" upgrade - raises the entire energy multiplier to ^1.02
+            const thatsDefinitelyGoodLevel = gameState.upgrades['thatsDefinitelyGood'] || 0;
+            if (thatsDefinitelyGoodLevel > 0) {
+                energyMultiplier = Math.pow(Math.max(energyMultiplier, 1), 1.02);
+            }
+            
+            // Apply "This is Peak" upgrade - cosmic energy boosts itself again
+            const thisIsPeakLevel = gameState.upgrades['thisIsPeak'] || 0;
+            if (thisIsPeakLevel > 0) {
+                const peakBoost = Math.pow(gameState.cosmicEnergy, 0.02) + 1.2;
+                energyMultiplier *= peakBoost;
+            }
+            
+            // Apply "Improvable Boost" upgrade - x3 cosmic energy + 2% per upgrade
+            const improvableBoostLevel = gameState.upgrades['improvableBoost'] || 0;
+            if (improvableBoostLevel > 0) {
+                let totalUpgrades = 0;
+                [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades, ...dustUpgrades].forEach(u => {
+                    totalUpgrades += gameState.upgrades[u.id] || 0;
+                });
+                const baseBoost = 3;
+                const upgradeBoost = totalUpgrades * 0.02;
+                const improvableBoost = baseBoost + upgradeBoost;
+                energyMultiplier *= improvableBoost;
+            }
+            
+            // Apply "Deserved" upgrade - raises the entire energy multiplier to ^1.04
+            const deservedLevel = gameState.upgrades['deserved'] || 0;
+            if (deservedLevel > 0) {
+                energyMultiplier = Math.pow(Math.max(energyMultiplier, 1), 1.04);
+            }
+            
+            // Apply "all in one" upgrade - the ultimate upgrade with many effects
+            const allInOneLevel = gameState.upgrades['allInOne'] || 0;
+            if (allInOneLevel > 0) {
+                // Base x1.2 multipliers
+                energyMultiplier *= 1.2;
+                darkMatterMultiplier *= 1.2;
+                
+                // Time boosts all resources: (time/20k)^0.55/9+1
+                const timeBoost = Math.pow(gameState.universeAge / 20000, 0.55) / 9 + 1;
+                energyMultiplier *= timeBoost;
+                darkMatterMultiplier *= timeBoost;
+                
+                // Self-boosting effects
+                const energySelfBoost = Math.pow(gameState.cosmicEnergy, 0.005) + 1;
+                const darkMatterSelfBoost = Math.pow(gameState.darkMatter, 0.005) + 1;
+                energyMultiplier *= energySelfBoost;
+                darkMatterMultiplier *= darkMatterSelfBoost;
+                
+                // ^1.005 base multiplier for all
+                energyMultiplier = Math.pow(Math.max(energyMultiplier, 1), 1.005);
+                darkMatterMultiplier = Math.pow(Math.max(darkMatterMultiplier, 1), 1.005);
+                
+                // x1.01 DM per 2 OOMs of cosmic energy
+                const energyOOMs = Math.log10(Math.max(gameState.cosmicEnergy, 1));
+                const twoOOMBonus = Math.floor(energyOOMs / 2);
+                if (twoOOMBonus > 0) {
+                    darkMatterMultiplier *= Math.pow(1.01, twoOOMBonus);
+                }
+                
+                // x1.1 energy till best record, x1.2 after
+                if (gameState.cosmicEnergy < gameState.bestCosmicEnergy) {
+                    energyMultiplier *= 1.1;
+                } else {
+                    energyMultiplier *= 1.2;
+                }
+            }
+            
+            // Apply "AWESOME!" upgrade - raises the entire dark matter amount to ^1.025
+            const awesomeDarkMatterLevel = gameState.upgrades['awesomeDarkMatter'] || 0;
+            if (awesomeDarkMatterLevel > 0) {
+                darkMatterMultiplier = Math.pow(Math.max(darkMatterMultiplier, 1), 1.025);
+            }
+            
+            // Handle overflow prevention
+            if (!isFinite(energyMultiplier) || energyMultiplier > 1e308) {
+                energyMultiplier = 1e308;
+            }
+            if (!isFinite(darkMatterMultiplier) || darkMatterMultiplier > 1e308) {
+                darkMatterMultiplier = 1e308;
+            }
+            if (!isFinite(quantumLeapMultiplier) || quantumLeapMultiplier > 1e308) {
+                quantumLeapMultiplier = 1e308;
+            }
+            
+            return { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier };
+        }
+
+        // Game loop
+        function gameLoop() {
+            // Update best cosmic energy record
+            gameState.bestCosmicEnergy = Math.max(gameState.bestCosmicEnergy, gameState.cosmicEnergy);
+            
+            // Special achievement notification for reaching 1e40 (the new end)
+            if (gameState.cosmicEnergy >= 1e40 && !gameState.shownUltimateNotification) {
+                gameState.shownUltimateNotification = true;
+                showNotification('🌟 ULTIMATE ACHIEVEMENT: You have reached 1e40 Cosmic Energy! The theoretical limit of this universe!');
+                
+                // Special celebration effect
+                setTimeout(() => {
+                    showNotification('👑 COSMIC EMPEROR: You have conquered the infinite cosmos! Congratulations on reaching the end!');
+                }, 3000);
+            }
+            
+            const { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier } = calculateMultipliers();
+            
+            // Calculate age acceleration from temporal upgrades
+            let ageMultiplier = 1;
+            const temporalDilationLevel = gameState.upgrades['temporalDilation'] || 0;
+            const hyperspeedLevel = gameState.upgrades['hyperspeedEvolution'] || 0;
+            const temporalSuperchargeLevel = gameState.upgrades['temporalSupercharge'] || 0;
+            const universalBuffLevel = gameState.upgrades['universalBuff'] || 0;
+            
+            // Apply Time Booster upgrade
+            const timeBoosterLevel = gameState.upgrades['timeBooster'] || 0;
+            if (timeBoosterLevel > 0) {
+                ageMultiplier *= 2;
+            }
+            
+            if (temporalDilationLevel > 0) ageMultiplier *= 2;
+            if (hyperspeedLevel > 0) ageMultiplier *= 2;
+            if (universalBuffLevel > 0) ageMultiplier *= 3;
+            if (temporalSuperchargeLevel > 0) {
+                const superchargeBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.03) / 1.11 + 1;
+                ageMultiplier *= superchargeBoost;
+            }
+            
+            // Apply "Nerfing Nerf" upgrade - age boosts itself
+            const nerfingNerfLevel = gameState.upgrades['nerfingNerf'] || 0;
+            if (nerfingNerfLevel > 0) {
+                const ageBoost = Math.pow(gameState.universeAge, 0.08) + 1;
+                ageMultiplier *= ageBoost;
+            }
+            
+            // Apply "all in one" upgrade age effects
+            const allInOneLevel = gameState.upgrades['allInOne'] || 0;
+            if (allInOneLevel > 0) {
+                // Age boost from cosmic energy, dark matter, quantum leaps
+                const allInOneAgeBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.001) + 1;
+                ageMultiplier *= allInOneAgeBoost;
+                
+                // Age increases itself by x1.03 per OOM
+                const ageOOMs = Math.log10(Math.max(gameState.universeAge, 1));
+                const ageSelfBoost = Math.pow(1.03, ageOOMs);
+                ageMultiplier *= ageSelfBoost;
+            }
+            
+            // Age divider after 1000 eons
+            if (gameState.universeAge >= 1000) {
+                ageMultiplier /= Math.pow(Math.pow(gameState.universeAge, 0.21), 0.95) + 1;
+            }
+            
+            // Additional age divider after 1200 eons
+            if (gameState.universeAge >= 1200) {
+                ageMultiplier /= 1.5;
+            }
+            
+            // Check for galactic events
+            let galacticEventBoost = 1;
+            const galacticEventsLevel = gameState.upgrades['galacticEvents'] || 0;
+            if (galacticEventsLevel > 0) {
+                if (Math.random() < 0.15) { // 15% chance
+                    galacticEventBoost = 30;
+                    showNotification('🌠 GALACTIC EVENT: x30 Cosmic Energy this tick!');
+                }
+            }
+            
+            // Generate energy with overflow protection
+            let energyGain = gameState.energyGeneration * energyMultiplier * galacticEventBoost * 0.1;
+            let ageGain = 0.1 * ageMultiplier;
+            
+            // Prevent infinite/NaN values
+            if (!isFinite(energyGain) || energyGain > 1e100) {
+                energyGain = Math.min(energyGain, 1e100);
+            }
+            if (!isFinite(ageGain) || ageGain > 1000) {
+                ageGain = Math.min(ageGain, 1000);
+            }
+            
+            gameState.cosmicEnergy = Math.min(gameState.cosmicEnergy + energyGain, 1e308);
+            gameState.universeAge = Math.min(gameState.universeAge + ageGain, 1e100);
+            
+            // Generate black hole mass if unlocked
+            if (gameState.blackHoleUnlocked) {
+                const massGeneration = calculateBlackHoleMassGeneration() * 0.1;
+                gameState.blackHoleMass += massGeneration;
+                
+                // Check for unit conversion (grams to kilograms)
+                if (gameState.blackHoleUnit === 'grams' && gameState.blackHoleMass >= 1000) {
+                    gameState.blackHoleMass = gameState.blackHoleMass / 1000;
+                    gameState.blackHoleUnit = 'kilograms';
+                    showNotification('⚫ BLACK HOLE EVOLUTION: Your black hole has grown to 1 kilogram!');
+                }
+                
+                // Check for scientific notation notification (at 1000 kilograms)
+                if (gameState.blackHoleUnit === 'kilograms' && gameState.blackHoleMass >= 1000 && !gameState.shownBlackHoleScientificNotification) {
+                    gameState.shownBlackHoleScientificNotification = true;
+                    showNotification('⚫ BLACK HOLE NOTATION: Black Hole mass now uses scientific notation!');
+                }
+            }
+            
+            // Scientific notification at 100 trillion
+            if (gameState.cosmicEnergy >= 100000000000000 && !gameState.shownTrillionNotification) {
+                gameState.shownTrillionNotification = true;
+                showNotification('🔬 SCIENTIFIC BREAKTHROUGH: Universe reaches 100 trillion energy units! Quantum mechanics unlocked!');
+            }
+            
+            // Scientific notification at 1 trillion  
+            if (gameState.cosmicEnergy >= 1000000000000 && !gameState.shownFirstTrillionNotification) {
+                gameState.shownFirstTrillionNotification = true;
+                showNotification('🌌 COSMIC MILESTONE: First trillion energy achieved! The universe expands rapidly!');
+            }
+            
+            // Generate dark matter passively if upgrade is bought
+            const darkMatterGenLevel = gameState.upgrades['darkMatterGen'] || 0;
+            const ohItWasSlowLevel = gameState.upgrades['ohItWasSlow'] || 0;
+            
+            if (darkMatterGenLevel > 0) {
+                const potentialDarkMatter = Math.pow(gameState.cosmicEnergy, 0.13) + 1;
+                let genRate = 0.01; // 1%
+                
+                // Check milestone count for generation rate improvements
+                let milestoneCount = 0;
+                for (let i = 0; i < gameState.milestones.length; i++) {
+                    if (gameState.milestones[i]) {
+                        milestoneCount++;
+                    }
+                }
+                
+                if (milestoneCount >= 1) genRate = 0.03; // 3% (milestone 1)
+                if (ohItWasSlowLevel > 0) genRate = 0.07; // 7% (upgrade override)
+                if (milestoneCount >= 9) genRate = 0.15; // 15% (milestone 9, highest priority)
+                
+                gameState.darkMatter += potentialDarkMatter * genRate * darkMatterMultiplier * 0.1;
+            }
+            
+            // Generate dust passively if upgrade is bought
+            const thisCanBeGeneratedLevel = gameState.upgrades['thisCanBeGenerated'] || 0;
+            if (thisCanBeGeneratedLevel > 0) {
+                gameState.dust += 0.001 * 0.1; // 0.001 per second, scaled by 0.1 tick rate
+            }
+            
+            // Update generation rate display
+            gameState.energyGeneration = gameState.energyGeneration * energyMultiplier;
+            
+            updateDisplay();
+        }
+
+        // Update display
+        function updateDisplay() {
+            document.getElementById('cosmicEnergy').textContent = formatNumber(gameState.cosmicEnergy);
+            document.getElementById('energyGeneration').textContent = formatNumber(gameState.energyGeneration) + '/sec';
+            document.getElementById('universeAge').textContent = formatNumber(gameState.universeAge) + ' eons';
+            document.getElementById('darkMatter').textContent = formatNumber(gameState.darkMatter);
+            document.getElementById('quantumLeaps').textContent = formatNumber(gameState.quantumLeaps, true);
+            document.getElementById('dustAmount').textContent = formatNumber(gameState.dust);
+            document.getElementById('dustCollections').textContent = gameState.dustCollections;
+            
+            // Update black hole display if unlocked
+            if (gameState.blackHoleUnlocked) {
+                const massGeneration = calculateBlackHoleMassGeneration();
+                document.getElementById('blackHoleMass').textContent = formatNumber(gameState.blackHoleMass, false, true);
+                document.getElementById('blackHoleMassDisplay').textContent = formatNumber(gameState.blackHoleMass, false, true);
+                document.getElementById('massGeneration').textContent = formatNumber(massGeneration) + '/sec';
+            }
+            
+            // Update dust collection button
+            const dustBtn = document.getElementById('collectDustBtn');
+            if (canCollectDust()) {
+                dustBtn.disabled = false;
+                dustBtn.textContent = `✨ Collect ${getDustGain()} Dust (Ready!)`;
+            } else {
+                dustBtn.disabled = true;
+                dustBtn.textContent = `✨ Collect Dust (${getDustTimer()})`;
+            }
+            
+            // Show/hide buttons and tabs based on progress
+            const stellarCollapseBtn = document.getElementById('stellarCollapse');
+            
+            if (gameState.cosmicEnergy >= 1000) {
+                stellarCollapseBtn.style.display = 'block';
+                document.querySelector('[data-tab="dark-matter"]').style.display = 'block';
+                
+                // Enable/disable stellar collapse button based on 500K requirement
+                if (gameState.cosmicEnergy >= 500000) {
+                    stellarCollapseBtn.disabled = false;
+                    stellarCollapseBtn.textContent = `⭐ Stellar Collapse (${formatNumber(calculateDarkMatterGain())} Dark Matter)`;
+                } else {
+                    stellarCollapseBtn.disabled = true;
+                    stellarCollapseBtn.textContent = `⭐ Stellar Collapse (Need 500K Cosmic Energy)`;
+                }
+            }
+            
+            const quantumLeapBtn = document.getElementById('quantumLeap');
+            const unlockQuantumForever = gameState.upgrades['unlockQuantumForever'] || 0;
+            
+            if (gameState.darkMatter >= 100 || unlockQuantumForever > 0) {
+                quantumLeapBtn.style.display = 'block';
+                document.querySelector('[data-tab="quantum"]').style.display = 'block';
+                
+                // Enable/disable quantum leap button based on 50K dark matter requirement
+                if (gameState.darkMatter >= 50000) {
+                    quantumLeapBtn.disabled = false;
+                    const quantumGain = calculateQuantumLeapGain();
+                    quantumLeapBtn.textContent = `🔮 Quantum Leap (${formatNumber(quantumGain, true)} Quantum Leaps)`;
+                    
+                    // Show notification when quantum leap gain hits 1T for the first time
+                    if (quantumGain >= 1000000000000 && !gameState.shownQuantumLeapTrillionNotification) {
+                        gameState.shownQuantumLeapTrillionNotification = true;
+                        showNotification('🚀 MASSIVE QUANTUM GAIN: Your next Quantum Leap will yield over 1 Trillion! The multiverse trembles!');
+                    }
+                } else {
+                    quantumLeapBtn.disabled = true;
+                    quantumLeapBtn.textContent = `🔮 Quantum Leap (Need 50K Dark Matter)`;
+                }
+            }
+            
+            // Reset generation rate for next calculation
+            const { energyMultiplier } = calculateMultipliers();
+            gameState.energyGeneration = 1;
+        }
+
+        // Update upgrade displays
+        function updateUpgradeDisplay() {
+            updateUpgradeSection('cosmicUpgrades', cosmicUpgrades, 'cosmicEnergy');
+            updateUpgradeSection('darkMatterUpgrades', darkMatterUpgrades, 'darkMatter');
+            updateUpgradeSection('quantumUpgrades', quantumUpgrades, 'quantumLeaps');
+            updateUpgradeSection('dustUpgrades', dustUpgrades, 'dust');
+            
+            if (gameState.blackHoleUnlocked) {
+                updateUpgradeSection('blackHoleUpgrades', blackHoleUpgrades, 'blackHoleMass');
+            }
+        }
+
+        function updateUpgradeSection(containerId, upgrades, currencyType) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            upgrades.forEach(upgrade => {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                let cost = upgrade.cost;
+                
+                // Only apply scaling cost for repeatable upgrades
+                if (upgrade.repeatable) {
+                    cost = Math.floor(upgrade.cost * Math.pow(1.15, level));
+                }
+                
+                const currency = gameState[currencyType === 'cosmicEnergy' ? 'cosmicEnergy' : 
+                                           currencyType === 'darkMatter' ? 'darkMatter' : 
+                                           currencyType === 'dust' ? 'dust' : 
+                                           currencyType === 'quantumLeaps' ? 'quantumLeaps' : 
+                                           currencyType === 'blackHoleMass' ? 'blackHoleMass' : 0];
+                const canAfford = currency >= cost;
+                const isMaxed = level >= upgrade.maxLevel;
+
+                const upgradeDiv = document.createElement('div');
+                upgradeDiv.className = `upgrade-card ${canAfford && !isMaxed ? 'affordable' : ''} ${isMaxed ? 'maxed' : ''}`;
+                
+                let costDisplay = '';
+                if (isMaxed) {
+                    costDisplay = upgrade.repeatable ? `OWNED (${level})` : 'OWNED';
+                } else {
+                    const costLabel = currencyType === 'cosmicEnergy' ? 'Cosmic Energy' : 
+                                    currencyType === 'darkMatter' ? 'Dark Matter' : 
+                                    currencyType === 'dust' ? 'Dust' : 
+                                    currencyType === 'quantumLeaps' ? 'Quantum Leaps' : 
+                                    currencyType === 'blackHoleMass' ? 'Black Hole Mass' : '';
+                    costDisplay = `Cost: ${formatNumber(cost)} ${costLabel}`;
+                }
+                
+                let levelDisplay = '';
+                if (upgrade.repeatable && level > 0) {
+                    levelDisplay = ` (${level}/${upgrade.maxLevel})`;
+                } else if (level > 0 && !upgrade.repeatable) {
+                    levelDisplay = ' ✓';
+                }
+                
+                let effectText = upgrade.effect;
+                
+                // Show current boost for special upgrades
+                if (upgrade.showBoost && level > 0) {
+                    if (upgrade.id === 'improvableBoost') {
+                        let totalUpgrades = 0;
+                        [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades, ...dustUpgrades].forEach(u => {
+                            totalUpgrades += gameState.upgrades[u.id] || 0;
+                        });
+                        const baseBoost = 3;
+                        const upgradeBoost = totalUpgrades * 0.02;
+                        const currentBoost = baseBoost + upgradeBoost;
+                        effectText += ` (Current: x${formatNumber(currentBoost)} = x3 base + x${formatNumber(upgradeBoost)} from ${totalUpgrades} upgrades)`;
+                    } else if (upgrade.id === 'continue') {
+                        const currentBoost = Math.pow(gameState.cosmicEnergy, 0.005) + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'energyBooststself') {
+                        const energyBoostBaseLevel = gameState.upgrades['energyBoostBase'] || 0;
+                        let baseExponent = 0.04; // Default base
+                        if (energyBoostBaseLevel > 0) {
+                            baseExponent = 0.06; // Upgraded base
+                        }
+                        const currentBoost = Math.pow(Math.pow(gameState.cosmicEnergy, baseExponent), 1.05) + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'infinityEngine') {
+                        const currentBoost = Math.pow(gameState.darkMatter, 0.04) + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'timeDistortionField') {
+                        let currentBoost;
+                        if (gameState.cosmicEnergy >= 10000000000) {
+                            currentBoost = Math.pow(gameState.universeAge / 75, 0.84) / 1.2 + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)} - softcapped)`;
+                        } else {
+                            currentBoost = Math.pow(gameState.universeAge / 50, 0.95) + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                        }
+                    } else if (upgrade.id === 'timeBoostsDarkMatter') {
+                        let currentBoost;
+                        if (gameState.cosmicEnergy >= 10000000000) {
+                            currentBoost = Math.pow(gameState.universeAge / 500, 0.8) + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)} - slightly softcapped)`;
+                        } else {
+                            currentBoost = Math.pow(gameState.universeAge / 450, 0.87) + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                        }
+                    } else if (upgrade.id === 'temporalSupercharge') {
+                        const currentBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.03) / 1.11 + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'magnitude2') {
+                        let totalUpgrades = 0;
+                        [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades].forEach(u => {
+                            totalUpgrades += gameState.upgrades[u.id] || 0;
+                        });
+                        const currentBoost = Math.pow(1.05, totalUpgrades);
+                        effectText += ` (Current: x${formatNumber(currentBoost)} with ${totalUpgrades} upgrades)`;
+                    } else if (upgrade.id === 'infinityEngine3') {
+                        const infinityEngineLevel = gameState.upgrades['infinityEngine'] || 0;
+                        if (infinityEngineLevel > 0) {
+                            const infinityEngineBoost = Math.pow(gameState.darkMatter, 0.04) + 1;
+                            const quantumBoost = Math.pow(infinityEngineBoost, 0.2) * 2;
+                            effectText += ` (Current: x${formatNumber(quantumBoost)} quantum leap gain)`;
+                        } else {
+                            effectText += ' (Requires Infinity Engine to work)';
+                        }
+                    } else if (upgrade.id === 'quantumSelfBoost') {
+                        if (gameState.quantumLeaps > 0) {
+                            const currentBoost = Math.pow(gameState.quantumLeaps, 0.1) * 2 + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)} quantum leap gain)`;
+                        } else {
+                            effectText += ' (Requires quantum leaps to boost)';
+                        }
+                    } else if (upgrade.id === 'synergisedEnergy') {
+                        const currentBoost = Math.pow(gameState.darkMatter, 0.08) * 1.2 + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'deserved2') {
+                        // Calculate what the dark matter multiplier would be without Deserved.2
+                        const { darkMatterMultiplier: baseDMMultiplier } = calculateMultipliers();
+                        // Remove the Deserved.2 effect temporarily to show the boost
+                        const withoutDeserved2 = Math.pow(baseDMMultiplier, 1/1.02);
+                        const deserved2Boost = baseDMMultiplier / withoutDeserved2;
+                        effectText += ` (Current boost: x${formatNumber(deserved2Boost)})`;
+                    } else if (upgrade.id === 'awesomeBoost') {
+                        const awesomeBoostLevel = gameState.upgrades['awesomeBoost'] || 0;
+                        if (awesomeBoostLevel > 0) {
+                            let currentBoost = Math.log10(Math.max(gameState.cosmicEnergy, 1)) + 1;
+                            
+                            // Check if improvement again is purchased
+                            const improvementAgainLevel = gameState.upgrades['improvementAgain'] || 0;
+                            if (improvementAgainLevel > 0) {
+                                const improvementMultiplier = Math.log10(Math.max(gameState.cosmicEnergy, 1)) / 2;
+                                currentBoost *= improvementMultiplier;
+                            }
+                            
+                            effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                        } else {
+                            effectText += ' (Requires Awesome Boost upgrade)';
+                        }
+                    } else if (upgrade.id === 'unoriginalAwesomeBoost') {
+                        let currentBoost = Math.log(Math.max(gameState.cosmicEnergy, 1)) / Math.log(100) / 5 + 1;
+                        
+                        // Apply boost it else power if purchased
+                        const boostItElseLevel = gameState.upgrades['boostItElse'] || 0;
+                        if (boostItElseLevel > 0) {
+                            currentBoost = Math.pow(currentBoost, 1.4);
+                        }
+                        
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'energyBoostsDarkMatter') {
+                        const currentBoost = Math.pow(gameState.cosmicEnergy, 0.08) / 1.3 + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'deserved') {
+                        // Calculate what the multiplier would be without Deserved
+                        const { energyMultiplier: baseMultiplier } = calculateMultipliers();
+                        // Remove the Deserved effect temporarily to show the boost
+                        const withoutDeserved = Math.pow(baseMultiplier, 1/1.04);
+                        const deservedBoost = baseMultiplier / withoutDeserved;
+                        effectText += ` (Current boost: x${formatNumber(deservedBoost)})`;
+                    } else if (upgrade.id === 'thatsDefinitelyGood') {
+                        // Show how much the ^1.02 is boosting at current energy level
+                        const currentBoost = Math.pow(gameState.cosmicEnergy, 0.02);
+                        effectText += ` (Current boost: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'NICE') {
+                        // Calculate what the multiplier would be without NICE
+                        const { energyMultiplier: baseMultiplier } = calculateMultipliers();
+                        // Remove the NICE effect temporarily to show the boost
+                        const withoutNice = Math.pow(baseMultiplier, 1/1.05);
+                        const niceBoost = baseMultiplier / withoutNice;
+                        effectText += ` (Current boost: x${formatNumber(niceBoost)})`;
+                    } else if (upgrade.id === 'thisIsPeak') {
+                        const currentBoost = Math.pow(gameState.cosmicEnergy, 0.02) + 1.2;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'nerfingNerf') {
+                        const currentBoost = Math.pow(gameState.universeAge, 0.08) + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)} age acceleration)`;
+                    } else if (upgrade.id === 'reallyFakeUpgrade') {
+                        const unoriginalAwesomeBoostLevel = gameState.upgrades['unoriginalAwesomeBoost'] || 0;
+                        if (unoriginalAwesomeBoostLevel > 0) {
+                            const currentBoost = Math.log(Math.max(gameState.cosmicEnergy, 1)) / Math.log(100) / 5 + 1;
+                            effectText += ` (Current: x${formatNumber(currentBoost)} to dark matter)`;
+                        } else {
+                            effectText += ' (Requires Unoriginal Awesome Boost to work)';
+                        }
+                    } else if (upgrade.id === 'awesomeDarkMatter') {
+                        // Calculate what the multiplier would be without AWESOME!
+                        const { darkMatterMultiplier: baseDMMultiplier } = calculateMultipliers();
+                        // Remove the AWESOME! effect temporarily to show the boost
+                        const withoutAwesome = Math.pow(baseDMMultiplier, 1/1.025);
+                        const awesomeBoost = baseDMMultiplier / withoutAwesome;
+                        effectText += ` (Current boost: x${formatNumber(awesomeBoost)})`;
+                    } else if (upgrade.id === 'boostingReference') {
+                        const currentBoost = (gameState.dust / 12) * 1.1 + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'boostingReference2') {
+                        const currentBoost = Math.pow(gameState.dust / 25, 0.8) + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'boostingReference3') {
+                        const currentBoost = Math.pow(gameState.dust / 10, 0.8) / 1.3 + 1;
+                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'amazingQuantumLeaps') {
+                        const quantumGain = calculateQuantumLeapGain();
+                        const withoutAmazing = Math.pow(quantumGain, 1/1.015);
+                        const amazingBoost = quantumGain / withoutAmazing;
+                        effectText += ` (Current boost: x${formatNumber(amazingBoost)} quantum leap gain)`;
+                    }
+                }
+                
+                // Show current research synergy bonus
+                if (upgrade.id === 'researchSynergy' && level > 0) {
+                    let completedResearch = 0;
+                    [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades].forEach(u => {
+                        if (gameState.upgrades[u.id] > 0) completedResearch++;
+                    });
+                    const researchBonus = Math.pow(1.1, completedResearch);
+                    effectText += ` (Current: x${formatNumber(researchBonus)} dark matter)`;
+                } else if (upgrade.id === 'researchSynergy2' && level > 0) {
+                    let completedResearch = 0;
+                    [...cosmicUpgrades, ...darkMatterUpgrades, ...quantumUpgrades].forEach(u => {
+                        if (gameState.upgrades[u.id] > 0) completedResearch++;
+                    });
+                    const researchBonus = Math.pow(1.1, completedResearch);
+                    const energyBonus = Math.pow(researchBonus, 0.5);
+                    effectText += ` (Current: x${formatNumber(energyBonus)} cosmic energy)`;
+                }
+                
+                upgradeDiv.innerHTML = `
+                    <span class="upgrade-icon">${upgrade.icon}</span>
+                    <div class="upgrade-title">${upgrade.name}${levelDisplay}</div>
+                    <div class="upgrade-cost">${costDisplay}</div>
+                    <div class="upgrade-description">${effectText}</div>
+                `;
+                
+                if (!isMaxed) {
+                    upgradeDiv.addEventListener('click', () => buyUpgrade(upgrades, upgrade.id));
+                }
+                
+                container.appendChild(upgradeDiv);
+            });
+        }
+
+        // Update milestones
+        function updateMilestones() {
+            const milestonesContainer = document.getElementById('milestones');
+            if (!gameState.upgrades['unlockMilestones']) {
+                milestonesContainer.innerHTML = '';
+                return;
+            }
+            
+            milestonesContainer.innerHTML = '<h3 style="color: #64ffda; margin-bottom: 20px; text-align: center;">🏆 MILESTONES</h3>';
+            
+            // Get current milestone requirements (dynamically calculated)
+            const currentMilestoneRequirements = getMilestoneRequirements();
+            
+            currentMilestoneRequirements.forEach((requirement, index) => {
+                const isCompleted = gameState.totalQuantumLeaps >= requirement;
+                if (!gameState.milestones[index]) gameState.milestones[index] = isCompleted;
+                
+                const milestoneDiv = document.createElement('div');
+                milestoneDiv.className = `milestone ${isCompleted ? 'completed' : ''}`;
+                
+                milestoneDiv.innerHTML = `
+                    <div class="milestone-title">Milestone ${index + 1} ${isCompleted ? '✓' : ''}</div>
+                    <div>Requirement: ${formatNumber(requirement)} total Quantum Leaps</div>
+                    <div>Effect: ${milestoneEffects[index]}</div>
+                    <div>Progress: ${formatNumber(gameState.totalQuantumLeaps)}/${formatNumber(requirement)}</div>
+                `;
+                
+                milestonesContainer.appendChild(milestoneDiv);
+            });
+        }
+
+        // Tab switching
+        function initializeTabs() {
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(tc => tc.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(targetTab).classList.add('active');
+                });
+            });
+        }
+
+        // Initialize event listeners
+        function initializeEventListeners() {
+            document.getElementById('bigBangReset').addEventListener('click', performBigBangReset);
+            document.getElementById('stellarCollapse').addEventListener('click', performStellarCollapse);
+            document.getElementById('quantumLeap').addEventListener('click', performQuantumLeap);
+            document.getElementById('collectDustBtn').addEventListener('click', collectDust);
+        }
+
+        // Initialize game
+        function initializeGame() {
+            createStars();
+            initializeTabs();
+            initializeEventListeners();
+            updateDisplay();
+            updateUpgradeDisplay();
+            updateMilestones();
+            
+            // Start game loop
+            setInterval(gameLoop, 100);
+            
+            // Update upgrade displays every second
+            setInterval(updateUpgradeDisplay, 1000);
+            
+            // Auto-save every 10 seconds
+            setInterval(saveGame, 10000);
+            
+            // Load saved game
+            loadGame();
+        }
+
+        // Save/Load game
+        function saveGame() {
+            try {
+                const saveData = {
+                    ...gameState,
+                    lastSaveTime: Date.now()
+                };
+                localStorage.setItem('cosmicEvolution', JSON.stringify(saveData));
+            } catch (e) {
+                // Handle localStorage not available
+                console.log('Save not available in this environment');
+            }
+        }
+
+        function loadGame() {
+            try {
+                const saved = localStorage.getItem('cosmicEvolution');
+                if (saved) {
+                    const savedState = JSON.parse(saved);
+                    const currentTime = Date.now();
+                    const lastSaveTime = savedState.lastSaveTime || currentTime;
+                    const offlineTime = Math.max(0, currentTime - lastSaveTime);
+                    
+                    // Load the saved state
+                    gameState = { ...gameState, ...savedState };
+                    
+                    // Handle offline dust collection progression
+                    if (offlineTime > 0 && gameState.lastDustCollection > 0) {
+                        const collectionTime = getDustCollectionTime();
+                        const timesSinceLastCollection = gameState.lastDustCollection + collectionTime;
+                        
+                        // If dust was ready to collect when offline, advance the timer
+                        if (currentTime >= timesSinceLastCollection) {
+                            const extraTime = currentTime - timesSinceLastCollection;
+                            // Don't auto-collect, but advance the timer so it's still accurate
+                            gameState.lastDustCollection = currentTime - Math.min(extraTime, collectionTime - 1000); // Leave 1 second buffer
+                        }
+                    }
+                    
+                    // If no previous dust collection time, set it to allow immediate collection
+                    if (gameState.lastDustCollection === 0) {
+                        gameState.lastDustCollection = currentTime - getDustCollectionTime();
+                    }
+                    
+                    // Calculate offline progress
+                    if (offlineTime > 5000) { // Only if offline for more than 5 seconds
+                        const offlineSeconds = offlineTime / 1000;
+                        const { energyMultiplier } = calculateMultipliers();
+                        
+                        // Calculate age acceleration from temporal upgrades
+                        let ageMultiplier = 1;
+                        const temporalDilationLevel = gameState.upgrades['temporalDilation'] || 0;
+                        const hyperspeedLevel = gameState.upgrades['hyperspeedEvolution'] || 0;
+                        
+                        if (temporalDilationLevel > 0) ageMultiplier *= 2;
+                        if (hyperspeedLevel > 0) ageMultiplier *= 2;
+                        
+                        // Calculate offline gains (x5 less energy and time when offline)
+                        const offlineEnergyGain = (gameState.energyGeneration * energyMultiplier * offlineSeconds) / 5;
+                        const offlineAgeGain = (offlineSeconds * ageMultiplier) / 5;
+                        
+                        gameState.cosmicEnergy += offlineEnergyGain;
+                        gameState.universeAge += offlineAgeGain;
+                        
+                        // Generate dark matter passively if upgrade is bought
+                        const darkMatterGenLevel = gameState.upgrades['darkMatterGen'] || 0;
+                        if (darkMatterGenLevel > 0) {
+                            const potentialDarkMatter = Math.pow(gameState.cosmicEnergy, 0.13) + 1;
+                            let genRate = 0.01; // 1%
+                            
+                            // Check milestone count for generation rate improvements
+                            let milestoneCount = 0;
+                            for (let i = 0; i < gameState.milestones.length; i++) {
+                                if (gameState.milestones[i]) {
+                                    milestoneCount++;
+                                }
+                            }
+                            
+                            if (milestoneCount >= 1) genRate = 0.03; // 3% (milestone 1)
+                            if (gameState.upgrades['ohItWasSlow']) genRate = 0.07; // 7% (upgrade override)
+                            if (milestoneCount >= 8) genRate = 0.15; // 15% (milestone 8, highest priority)
+                            
+                            const { darkMatterMultiplier } = calculateMultipliers();
+                            const offlineDarkMatterGain = (potentialDarkMatter * genRate * darkMatterMultiplier * offlineSeconds) / 5;
+                            gameState.darkMatter += offlineDarkMatterGain;
+                        }
+                        
+                        // Generate dust passively if upgrade is bought
+                        const thisCanBeGeneratedLevel = gameState.upgrades['thisCanBeGenerated'] || 0;
+                        if (thisCanBeGeneratedLevel > 0) {
+                            const offlineDustGain = 0.001 * offlineSeconds; // Same rate when offline
+                            gameState.dust += offlineDustGain;
+                        }
+                        
+                        // Generate black hole mass passively if unlocked
+                        if (gameState.blackHoleUnlocked) {
+                            const massGeneration = calculateBlackHoleMassGeneration();
+                            const offlineMassGain = (massGeneration * offlineSeconds) / 5;
+                            gameState.blackHoleMass += offlineMassGain;
+                        }
+                        
+                        // Show offline progress notification
+                        const offlineHours = Math.floor(offlineTime / 3600000);
+                        const offlineMinutes = Math.floor((offlineTime % 3600000) / 60000);
+                        let timeString = '';
+                        if (offlineHours > 0) timeString += `${offlineHours}h `;
+                        if (offlineMinutes > 0) timeString += `${offlineMinutes}m`;
+                        if (!timeString) timeString = '<1m';
+                        
+                        showNotification(`Welcome back! Offline for ${timeString}. Gained ${formatNumber(offlineEnergyGain)} Cosmic Energy (reduced rate)`);
+                    }
+                    
+                    updateDisplay();
+                    updateUpgradeDisplay();
+                    updateMilestones();
+                }
+            } catch (e) {
+                console.log('Load not available in this environment');
+            }
+        }
+
+        // Start the game when page loads
+        window.addEventListener('load', initializeGame);
+    </script>
+</body>
+</html>
