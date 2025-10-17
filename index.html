@@ -274,53 +274,6 @@
             color: #4fd3a7;
         }
 
-        .black-hole-visual {
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 30px;
-            position: relative;
-            border-radius: 50%;
-            background: radial-gradient(circle at center, #000000 0%, #1a0033 70%, transparent 100%);
-            box-shadow: 0 0 50px #9c27b0, inset 0 0 50px #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .black-hole-visual::before {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: conic-gradient(from 0deg, transparent, #9c27b0, transparent, #3f51b5, transparent);
-            animation: rotate 10s linear infinite;
-            opacity: 0.7;
-        }
-
-        .black-hole-visual::after {
-            content: '';
-            position: absolute;
-            width: 80%;
-            height: 80%;
-            background: #000;
-            border-radius: 50%;
-            z-index: 1;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .black-hole-mass {
-            position: relative;
-            z-index: 2;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #e1bee7;
-        }
-
         @media (max-width: 768px) {
             .title {
                 font-size: 2rem;
@@ -369,7 +322,6 @@
             <div class="tab" data-tab="dark-matter" style="display: none;">🌑 Dark Matter Technologies</div>
             <div class="tab" data-tab="quantum" style="display: none;">🔮 Quantum Mechanics</div>
             <div class="tab" data-tab="dust">✨ Dust</div>
-            <div class="tab" data-tab="black-hole" style="display: none;">⚫ Black Hole</div>
         </div>
 
         <div class="tab-content active" id="cosmic-research">
@@ -407,21 +359,6 @@
             </div>
             <div class="upgrades-grid" id="dustUpgrades"></div>
         </div>
-
-        <div class="tab-content" id="black-hole">
-            <div class="black-hole-visual">
-                <div class="black-hole-mass" id="blackHoleMassDisplay">1.00 grams</div>
-            </div>
-            <div class="stat-card" style="margin-bottom: 20px;">
-                <div class="stat-label">Black Hole Mass</div>
-                <div class="stat-value" id="blackHoleMass">1.00 grams</div>
-            </div>
-            <div class="stat-card" style="margin-bottom: 20px;">
-                <div class="stat-label">Mass Generation</div>
-                <div class="stat-value" id="massGeneration">1.00/sec</div>
-            </div>
-            <div class="upgrades-grid" id="blackHoleUpgrades"></div>
-        </div>
     </div>
 
     <div class="notification" id="notification"></div>
@@ -453,11 +390,7 @@
             shownQuantumScientificNotification: false,
             shownQuantumScientificNotationChange: false,
             shownQuantumLeapTrillionNotification: false,
-            shownQuantumScientificNotationChange: false,
-            blackHoleUnlocked: false,
-            blackHoleMass: 1,
-            blackHoleUnit: 'grams',
-            shownBlackHoleScientificNotification: false
+            shownQuantumScientificNotationChange: false
         };
 
         // Upgrade definitions
@@ -465,11 +398,11 @@
             {id: 'stellarFusion', name: 'Stellar Fusion', icon: '⭐', cost: 10, costType: 'cosmicEnergy', effect: 'Double energy generation', multiplier: 2, maxLevel: 1},
             {id: 'galacticNetwork', name: 'Galactic Network', icon: '🌌', cost: 25, costType: 'cosmicEnergy', effect: 'Triple energy flow', multiplier: 3, maxLevel: 1},
             {id: 'temporalAcceleration', name: 'Temporal Acceleration', icon: '⏰', cost: 75, costType: 'cosmicEnergy', effect: 'Energy boost scales with universe age: (age/80)+1', maxLevel: 1},
-            {id: 'supernovaChain', name: 'Supernova Chain', icon: '💥', cost: 300, costType: 'cosmicEnergy', effect: '8x energy boost', multiplier: 8, maxLevel: 1},
+            {id: 'supernovaChain', name: 'Supernova Chain', icon: '💥', cost: 300, costType: 'cosmicEnergy', effect: '5x energy boost', multiplier: 5, maxLevel: 1},
             {id: 'cosmicResonance', name: 'Cosmic Resonance', icon: '🎵', cost: 2500, costType: 'cosmicEnergy', effect: '3.5x energy from cosmic frequencies', multiplier: 3.5, maxLevel: 1},
             {id: 'timeDistortionField', name: 'Time Distortion Field', icon: '🕳️', cost: 12500, costType: 'cosmicEnergy', effect: 'Temporal boost: (age/50)^0.95+1', maxLevel: 1, showBoost: true},
             {id: 'nebulaHarvesting', name: 'Nebula Harvesting', icon: '☁️', cost: 50000, costType: 'cosmicEnergy', effect: '3x energy from cosmic nebulae', multiplier: 3, maxLevel: 1},
-            {id: 'pulsarSync', name: 'Pulsar Synchronization', icon: '🌟', cost: 150000, costType: 'cosmicEnergy', effect: '3.5x energy from pulsar emissions', multiplier: 3.5, maxLevel: 1},
+            {id: 'pulsarSync', name: 'Pulsar Synchronization', icon: '🌟', cost: 150000, costType: 'cosmicEnergy', effect: '2.5x energy from pulsar emissions', multiplier: 2.5, maxLevel: 1},
             {id: 'quasarChanneling', name: 'Quasar Channeling', icon: '☀️', cost: 1500000, costType: 'cosmicEnergy', effect: '2.5x energy boost from quasar power', multiplier: 2.5, maxLevel: 1},
             {id: 'cosmicMultiplier', name: 'Cosmic Energy Multiplier', icon: '✖️', cost: 5000000, costType: 'cosmicEnergy', effect: 'x5 cosmic energy before 250M, then x3 cosmic energy', maxLevel: 1},
             {id: 'cosmicEnergyBoost', name: 'Cosmic Energy Boost', icon: '⚡', cost: 25000000, costType: 'cosmicEnergy', effect: 'x2.5 cosmic energy', multiplier: 2.5, maxLevel: 1},
@@ -498,16 +431,12 @@
             {id: 'youHaventGotSometimesQuantumLeapUpgradesAnyway', name: 'you havent got sometimes quantum leap upgrades anyway', icon: '🔮🤷', cost: 2e44, costType: 'cosmicEnergy', effect: 'x5 quantum leaps', maxLevel: 1},
             {id: 'getItRn', name: 'get it rn', icon: '⚡🔥', cost: 3e46, costType: 'cosmicEnergy', effect: 'x7 cosmic energy', multiplier: 7, maxLevel: 1},
             {id: 'NICE', name: 'NICE!', icon: '👌', cost: 1e50, costType: 'cosmicEnergy', effect: 'Cosmic energy raised to a power of 1.05', maxLevel: 1, showBoost: true},
-            {id: 'theyAllAreAmazing', name: 'they all are amazing', icon: '🌟💫', cost: 8e52, costType: 'cosmicEnergy', effect: 'x2 cosmic energy', multiplier: 2, maxLevel: 1},
-            {id: 'finallyWorthIt', name: 'finally worth it', icon: '💯', cost: 1e54, costType: 'cosmicEnergy', effect: 'x100 cosmic energy', multiplier: 100, maxLevel: 1},
-            {id: 'notWorthIt', name: 'not worth it', icon: '🌑💯', cost: 1e57, costType: 'cosmicEnergy', effect: 'x100 dark matter', multiplier: 100, maxLevel: 1, multipliesDarkMatter: true},
-            {id: 'blackHole', name: 'Black Hole?', icon: '⚫', cost: 2e57, costType: 'cosmicEnergy', effect: 'Unlocks the Black Hole tab and starts generating black hole mass', maxLevel: 1}
+            {id: 'theyAllAreAmazing', name: 'they all are amazing', icon: '🌟💫', cost: 8e52, costType: 'cosmicEnergy', effect: 'x2 cosmic energy', multiplier: 2, maxLevel: 1}
         ];
 
         const darkMatterUpgrades = [
             {id: 'darkEnergyInfusion', name: 'Dark Energy Infusion', icon: '🌑', cost: 3, costType: 'darkMatter', effect: '2x cosmic energy boost', multiplier: 2, maxLevel: 1},
             {id: 'recoverBoost', name: 'Recover Boost', icon: '🔄⚡', cost: 2, costType: 'darkMatter', effect: 'x1.8 cosmic energy', multiplier: 1.8, maxLevel: 1},
-            {id: 'timeBooster', name: 'Time Booster', icon: '⏰', cost: 1.5, costType: 'darkMatter', effect: 'x2 universe age gain', multiplier: 2, maxLevel: 1, boostsTime: true},
             {id: 'universalHarmony', name: 'Universal Harmony', icon: '🔮', cost: 5, costType: 'darkMatter', effect: '1.3x dark matter and energy', multiplier: 1.3, maxLevel: 1},
             {id: 'voidManipulation', name: 'Void Manipulation', icon: '⚫', cost: 12, costType: 'darkMatter', effect: '2x energy generation from void', multiplier: 2, maxLevel: 1},
             {id: 'cosmicMultiplierDM', name: 'Cosmic Energy Multiplier', icon: '✖️', cost: 20, costType: 'darkMatter', effect: 'x5 cosmic energy', multiplier: 5, maxLevel: 1},
@@ -524,7 +453,6 @@
             {id: 'improvisation', name: 'Improvisation', icon: '🎭', cost: 5000000, costType: 'darkMatter', effect: 'x5 cosmic energy boost', multiplier: 5, maxLevel: 1},
             {id: 'galacticNetworkQ', name: 'Galactic Network?', icon: '🌌❓', cost: 50000000, costType: 'darkMatter', effect: 'x3 dark matter', multiplier: 3, maxLevel: 1, multipliesDarkMatter: true},
             {id: 'evenMoreNetwork', name: 'Even More Network', icon: '🌌🌌', cost: 500000000, costType: 'darkMatter', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
-            {id: 'cootl', name: 'cootl', icon: '🔥', cost: 2000000000, costType: 'darkMatter', effect: 'x2 dark matter, x4 cosmic energy, x2 quantum leaps', multiplier: 4, maxLevel: 1},
             {id: 'deserved2', name: 'Deserved.2', icon: '👑²', cost: 300000000000, costType: 'darkMatter', effect: 'Dark matter multiplier raised to the power of 1.02', maxLevel: 1, showBoost: true},
             {id: 'simple', name: 'Simple', icon: '⚡', cost: 1000000000000, costType: 'darkMatter', effect: 'x2 cosmic energy', maxLevel: 1, multiplier: 2},
             {id: 'bruhTooUnoriginal', name: 'Bruh Too Unoriginal', icon: '🔗🌑', cost: 15000000000000, costType: 'darkMatter', effect: 'x5 cosmic energy', maxLevel: 1, multiplier: 5},
@@ -533,9 +461,9 @@
             {id: 'pushingUpToAllInOne', name: 'pushing up to all in one', icon: '⬆️', cost: 10000000000000000, costType: 'darkMatter', effect: 'x3 cosmic energy before 1e34 cosmic energy', maxLevel: 1},
             {id: 'leapTechnology', name: 'leap technology', icon: '🚀🔮', cost: 100000000000000000, costType: 'darkMatter', effect: 'x2 quantum leaps', maxLevel: 1},
             {id: 'cheapScaleButGood', name: 'cheap scale but good', icon: '💰⚡', cost: 7e17, costType: 'darkMatter', effect: 'x2.5 cosmic energy', multiplier: 2.5, maxLevel: 1},
-            {id: 'continue', name: 'continue', icon: '🔄⚡', cost: 6e20, costType: 'darkMatter', effect: 'Cosmic energy boosts itself again: (energy^0.007)*2+1', maxLevel: 1, showBoost: true},
+            {id: 'continue', name: 'continue', icon: '🔄⚡', cost: 6e20, costType: 'darkMatter', effect: 'Cosmic energy boosts itself again: (energy^0.005)+1', maxLevel: 1, showBoost: true},
             {id: 'scaleReduce', name: 'Scale Reduce', icon: '📉⚖️', cost: 2e23, costType: 'darkMatter', effect: 'Reduces milestone scaling: Milestone 10 = 150M, then x3 scaling (instead of 500M x10)', maxLevel: 1},
-            {id: 'boost', name: 'boost', icon: '🚀', cost: 1e23, costType: 'darkMatter', effect: 'x3 dark matter', multiplier: 3, maxLevel: 1, multipliesDarkMatter: true},
+            {id: 'boost', name: 'boost', icon: '🚀', cost: 1e23, costType: 'darkMatter', effect: 'x2 dark matter', multiplier: 2, maxLevel: 1, multipliesDarkMatter: true},
             {id: 'ifYouEverNeedIt', name: 'if you ever need it', icon: '🆘⚡', cost: 7e24, costType: 'darkMatter', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
             {id: 'awesomeDarkMatter', name: 'AWESOME!', icon: '🔥🌑', cost: 1e25, costType: 'darkMatter', effect: 'Dark matter raised to a power of 1.025', maxLevel: 1, showBoost: true}
         ];
@@ -548,15 +476,15 @@
             {id: 'quantumBoost', name: 'Quantum Boost', icon: '🔮⚡', cost: 20, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', multiplier: 2, maxLevel: 1},
             {id: 'quantumSelfBoost', name: 'Quantum Self-Enhancement', icon: '🔄', cost: 40, costType: 'quantumLeaps', effect: 'Quantum leaps boost themselves: (quantumLeaps^0.1)×2+1', maxLevel: 1, showBoost: true},
             {id: 'quantumMechanics', name: 'Quantum Mechanics', icon: '⚛️', cost: 61, costType: 'quantumLeaps', effect: 'x2 dark matter and x2 cosmic energy', multiplier: 2, maxLevel: 1},
-            {id: 'universalRecover', name: 'Universal Recover', icon: '🔄', cost: 100, costType: 'quantumLeaps', effect: 'x10 cosmic energy but nullified upon reaching your best cosmic energy amount', maxLevel: 1, multiplier: 10},
             {id: 'energyLeap', name: 'Energy Leap', icon: '⚡🚀', cost: 210, costType: 'quantumLeaps', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
             {id: 'universalBuff', name: 'Universal Buff', icon: '🌟💪', cost: 400, costType: 'quantumLeaps', effect: 'x3 age acceleration and x2 cosmic energy', maxLevel: 1},
+            {id: 'universalRecover', name: 'Universal Recover', icon: '🔄', cost: 100, costType: 'quantumLeaps', effect: 'x10 cosmic energy but nullified upon reaching your best cosmic energy amount', maxLevel: 1, multiplier: 10},
             {id: 'bestRecordResonance', name: 'Best Record Resonance', icon: '🏆', cost: 500, costType: 'quantumLeaps', effect: 'x5 cosmic energy after Universal Recover boost is gone', maxLevel: 1, multiplier: 5},
             {id: 'greatOne', name: 'Great One', icon: '⭐', cost: 1000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', maxLevel: 1, multiplier: 2},
             {id: 'thisIsPeak', name: 'This is Peak', icon: '🔥⭐', cost: 1300, costType: 'quantumLeaps', effect: 'Cosmic energy boosts itself again: (energy^0.02)+1.2', maxLevel: 1, showBoost: true},
             {id: 'ohItWasSlow', name: 'Oh It Was Slow', icon: '🌑🚀', cost: 2000, costType: 'quantumLeaps', effect: 'Improves dark matter generation to 7% and x2.5 quantum leaps', maxLevel: 1},
             {id: 'youNeedTimewall', name: 'You Need Timewall', icon: '⏰🛡️', cost: 7000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
-            {id: 'actualTimewall', name: 'actual timewall', icon: '🛡️⏰', cost: 30000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
+            {id: 'actualTimewall', name: 'actual timewall', icon: '🛡️⏰', cost: 20000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
             {id: 'wasThatUpgradeTooOp', name: 'was that upgrade too op?', icon: '🤔💥', cost: 60000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x1.5 dark matter', maxLevel: 1, multiplier: 2},
             {id: 'improvementAgain', name: 'improvement again', icon: '🔥⚡', cost: 150000, costType: 'quantumLeaps', effect: 'Awesome Boost upgrade is multiplied based on cosmic energy: (log₁₀(energy)/2)', maxLevel: 1, showBoost: true},
             {id: 'improvableBoost', name: 'Improvable Boost', icon: '📈', cost: 400000, costType: 'quantumLeaps', effect: 'x3 cosmic energy and increases by 2% for every upgrade (dust upgrades count)', maxLevel: 1, showBoost: true},
@@ -578,15 +506,6 @@
             {id: 'boostingReference2', name: 'Boosting Reference II', icon: '📖🌑', cost: 40, costType: 'dust', effect: 'Dust boosts dark matter: (dust/25)^0.8+1', maxLevel: 1, showBoost: true, multipliesDarkMatter: true},
             {id: 'boostingReference3', name: 'Boosting Reference III', icon: '📖🔮', cost: 40, costType: 'dust', effect: 'Dust boosts quantum leaps: (dust/10)^0.8/1.3+1', maxLevel: 1, showBoost: true, multipliesQuantumLeaps: true},
             {id: 'thisCanBeGenerated', name: 'this can be generated?', icon: '✨🔧', cost: 50, costType: 'dust', effect: 'Generate dust at rate of 0.001 per second', maxLevel: 1}
-        ];
-
-        const blackHoleUpgrades = [
-            {id: 'eventHorizonExpansion', name: 'Event Horizon Expansion', icon: '🌀', cost: 10, costType: 'blackHoleMass', effect: 'x2 black hole mass generation', multiplier: 2, maxLevel: 1},
-            {id: 'quantumFoam', name: 'Quantum Foam Absorption', icon: '⚛️', cost: 50, costType: 'blackHoleMass', effect: 'x3 black hole mass generation', multiplier: 3, maxLevel: 1},
-            {id: 'darkMatterAccretion', name: 'Dark Matter Accretion', icon: '🌑', cost: 250, costType: 'blackHoleMass', effect: 'x5 black hole mass generation', multiplier: 5, maxLevel: 1},
-            {id: 'stellarDevouring', name: 'Stellar Devouring', icon: '⭐', cost: 1000, costType: 'blackHoleMass', effect: 'x10 black hole mass generation', multiplier: 10, maxLevel: 1},
-            {id: 'galacticConsumption', name: 'Galactic Consumption', icon: '🌌', cost: 5000, costType: 'blackHoleMass', effect: 'x25 black hole mass generation', multiplier: 25, maxLevel: 1},
-            {id: 'universeCollapse', name: 'Universe Collapse', icon: '💥', cost: 25000, costType: 'blackHoleMass', effect: 'x100 black hole mass generation', multiplier: 100, maxLevel: 1}
         ];
 
         // Milestone definitions - dynamically calculated
@@ -642,10 +561,6 @@
             for (let i = 0; i < 100; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                // Make some stars brighter
-                if (Math.random() < 0.2) {
-                    star.classList.add('bright');
-                }
                 star.style.left = Math.random() * 100 + '%';
                 star.style.top = Math.random() * 100 + '%';
                 star.style.width = star.style.height = (Math.random() * 3 + 1) + 'px';
@@ -654,39 +569,12 @@
             }
         }
 
-        // Format numbers with support up to 1e600, special formatting for quantum leaps and black hole mass
-        function formatNumber(num, isQuantumLeaps = false, isBlackHoleMass = false) {
+        // Format numbers with support up to 1e600, special formatting for quantum leaps
+        function formatNumber(num, isQuantumLeaps = false) {
             // Handle special cases
             if (!isFinite(num) || isNaN(num)) return '0.00';
-            if (num < 0) return '-' + formatNumber(-num, isQuantumLeaps, isBlackHoleMass);
+            if (num < 0) return '-' + formatNumber(-num, isQuantumLeaps);
             if (num === 0) return isQuantumLeaps ? '0' : '0.00';
-            
-            // Special formatting for black hole mass
-            if (isBlackHoleMass) {
-                const unit = gameState.blackHoleUnit || 'grams';
-                
-                if (num < 1000) {
-                    return num.toFixed(2) + ' ' + unit;
-                } else if (num < 1000000) {
-                    return (num / 1000).toFixed(2) + ' K' + unit;
-                } else if (num < 1000000000) {
-                    return (num / 1000000).toFixed(2) + ' M' + unit;
-                } else if (num < 1000000000000) {
-                    return (num / 1000000000).toFixed(2) + ' B' + unit;
-                } else if (num < 1000000000000000) {
-                    return (num / 1000000000000).toFixed(2) + ' T' + unit;
-                }
-                
-                // Scientific notation for very large black hole mass
-                if (!gameState.shownBlackHoleScientificNotification && num >= 1000000000000000) {
-                    gameState.shownBlackHoleScientificNotification = true;
-                    showNotification('⚫ BLACK HOLE NOTATION: Black Hole mass now uses scientific notation (e.g., 1.50e15 grams)');
-                }
-                
-                const exponent = Math.floor(Math.log10(num));
-                const mantissa = num / Math.pow(10, exponent);
-                return mantissa.toFixed(2) + 'e' + exponent + ' ' + unit;
-            }
             
             // Special formatting for quantum leaps
             if (isQuantumLeaps) {
@@ -866,12 +754,6 @@
                 baseQuantum *= 2.5;
             }
             
-            // Apply "cootl" quantum leap boost if purchased
-            const cootlLevel = gameState.upgrades['cootl'] || 0;
-            if (cootlLevel > 0) {
-                baseQuantum *= 2; // x2 quantum leaps
-            }
-            
             // Apply "all in one" upgrade effects
             const allInOneLevel = gameState.upgrades['allInOne'] || 0;
             if (allInOneLevel > 0) {
@@ -925,28 +807,6 @@
             return Math.floor(baseQuantum);
         }
 
-        // Calculate black hole mass generation
-        function calculateBlackHoleMassGeneration() {
-            if (!gameState.blackHoleUnlocked) return 0;
-            
-            let baseGeneration = 1; // 1 gram per second base
-            
-            // Apply log10(cosmic energy * dark matter) multiplier
-            const energyDMProduct = gameState.cosmicEnergy * gameState.darkMatter;
-            const logMultiplier = Math.max(1, Math.log10(Math.max(energyDMProduct, 1)));
-            baseGeneration *= logMultiplier;
-            
-            // Apply black hole upgrades
-            for (let upgrade of blackHoleUpgrades) {
-                const level = gameState.upgrades[upgrade.id] || 0;
-                if (level > 0 && upgrade.multiplier) {
-                    baseGeneration *= Math.pow(upgrade.multiplier, level);
-                }
-            }
-            
-            return baseGeneration;
-        }
-
         // Big Bang reset
         function performBigBangReset() {
             const now = Date.now();
@@ -975,9 +835,6 @@
             gameState.quantumLeaps = 0;
             gameState.totalQuantumLeaps = 0;
             gameState.darkMatterGeneration = 0;
-            gameState.blackHoleUnlocked = false;
-            gameState.blackHoleMass = 1;
-            gameState.blackHoleUnit = 'grams';
             // Note: dust, dustCollections, and lastDustCollection are preserved
             
             // Reset all upgrades except dust upgrades
@@ -996,7 +853,6 @@
             // Hide advanced tabs and buttons
             document.querySelector('[data-tab="dark-matter"]').style.display = 'none';
             document.querySelector('[data-tab="quantum"]').style.display = 'none';
-            document.querySelector('[data-tab="black-hole"]').style.display = 'none';
             document.getElementById('stellarCollapse').style.display = 'none';
             document.getElementById('quantumLeap').style.display = 'none';
             
@@ -1196,25 +1052,15 @@
             
             const currency = gameState[upgrade.costType === 'cosmicEnergy' ? 'cosmicEnergy' : 
                                     upgrade.costType === 'darkMatter' ? 'darkMatter' : 
-                                    upgrade.costType === 'dust' ? 'dust' : 
-                                    upgrade.costType === 'quantumLeaps' ? 'quantumLeaps' : 
-                                    upgrade.costType === 'blackHoleMass' ? 'blackHoleMass' : 0];
+                                    upgrade.costType === 'dust' ? 'dust' : 'quantumLeaps'];
             
             if (currency >= cost && currentLevel < upgrade.maxLevel) {
                 if (upgrade.costType === 'cosmicEnergy') gameState.cosmicEnergy -= cost;
                 else if (upgrade.costType === 'darkMatter') gameState.darkMatter -= cost;
                 else if (upgrade.costType === 'dust') gameState.dust -= cost;
-                else if (upgrade.costType === 'quantumLeaps') gameState.quantumLeaps -= cost;
-                else if (upgrade.costType === 'blackHoleMass') gameState.blackHoleMass -= cost;
+                else gameState.quantumLeaps -= cost;
                 
                 gameState.upgrades[upgradeId] = currentLevel + 1;
-                
-                // Special effects for specific upgrades
-                if (upgradeId === 'blackHole') {
-                    gameState.blackHoleUnlocked = true;
-                    document.querySelector('[data-tab="black-hole"]').style.display = 'block';
-                    showNotification('⚫ BLACK HOLE UNLOCKED: A new dimension of power awaits!');
-                }
                 
                 // Play special sound for "all in one" upgrade, regular sound for others
                 if (upgradeId === 'allInOne') {
@@ -1242,7 +1088,6 @@
         function calculateMultipliers() {
             let energyMultiplier = 1;
             let darkMatterMultiplier = 1;
-            let quantumLeapMultiplier = 1;
             
             // Cosmic upgrades
             for (let upgrade of cosmicUpgrades) {
@@ -1449,51 +1294,6 @@
                 }
             }
             
-            // Dust upgrades
-            for (let upgrade of dustUpgrades) {
-                const level = gameState.upgrades[upgrade.id] || 0;
-                if (level > 0 && upgrade.multiplier) {
-                    if (upgrade.multipliesDarkMatter) {
-                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
-                    } else if (upgrade.multipliesQuantumLeaps) {
-                        quantumLeapMultiplier *= Math.pow(upgrade.multiplier, level);
-                    } else {
-                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
-                    }
-                }
-            }
-            
-            // Special dust upgrade formulas
-            const boostingReferenceLevel = gameState.upgrades['boostingReference'] || 0;
-            if (boostingReferenceLevel > 0) {
-                const dustBoost = (gameState.dust / 12) * 1.1 + 1;
-                energyMultiplier *= dustBoost;
-            }
-            
-            const boostingReference2Level = gameState.upgrades['boostingReference2'] || 0;
-            if (boostingReference2Level > 0) {
-                const dustBoost = Math.pow(gameState.dust / 25, 0.8) + 1;
-                darkMatterMultiplier *= dustBoost;
-            }
-            
-            // Black hole boosts
-            if (gameState.blackHoleUnlocked && gameState.blackHoleMass > 0) {
-                // Calculate black hole mass in grams for formula
-                let massInGrams = gameState.blackHoleMass;
-                if (gameState.blackHoleUnit === 'kilograms') {
-                    massInGrams = gameState.blackHoleMass * 1000;
-                }
-                
-                // Apply black hole boosts
-                const cosmicBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(6), 1.5);
-                const darkMatterBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(8), 1.3);
-                const quantumBoost = Math.pow(Math.log10(Math.max(massInGrams, 1)) / Math.log10(10), 1.1);
-                
-                energyMultiplier *= cosmicBoost;
-                darkMatterMultiplier *= darkMatterBoost;
-                quantumLeapMultiplier *= quantumBoost;
-            }
-            
             // Milestone effects (only affect cosmic energy)
             let milestoneCount = 0;
             for (let i = 0; i < gameState.milestones.length; i++) {
@@ -1614,6 +1414,35 @@
                 }
             }
             
+
+            
+            // Dust upgrades
+            for (let upgrade of dustUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    if (upgrade.multipliesDarkMatter) {
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.multipliesQuantumLeaps) {
+                        // This will be handled in quantum leap calculations
+                    } else {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    }
+                }
+            }
+            
+            // Special dust upgrade formulas
+            const boostingReferenceLevel = gameState.upgrades['boostingReference'] || 0;
+            if (boostingReferenceLevel > 0) {
+                const dustBoost = (gameState.dust / 12) * 1.1 + 1;
+                energyMultiplier *= dustBoost;
+            }
+            
+            const boostingReference2Level = gameState.upgrades['boostingReference2'] || 0;
+            if (boostingReference2Level > 0) {
+                const dustBoost = Math.pow(gameState.dust / 25, 0.8) + 1;
+                darkMatterMultiplier *= dustBoost;
+            }
+            
             // Apply "AWESOME!" upgrade - raises the entire dark matter amount to ^1.025
             const awesomeDarkMatterLevel = gameState.upgrades['awesomeDarkMatter'] || 0;
             if (awesomeDarkMatterLevel > 0) {
@@ -1627,11 +1456,8 @@
             if (!isFinite(darkMatterMultiplier) || darkMatterMultiplier > 1e308) {
                 darkMatterMultiplier = 1e308;
             }
-            if (!isFinite(quantumLeapMultiplier) || quantumLeapMultiplier > 1e308) {
-                quantumLeapMultiplier = 1e308;
-            }
             
-            return { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier };
+            return { energyMultiplier, darkMatterMultiplier };
         }
 
         // Game loop
@@ -1639,18 +1465,7 @@
             // Update best cosmic energy record
             gameState.bestCosmicEnergy = Math.max(gameState.bestCosmicEnergy, gameState.cosmicEnergy);
             
-            // Special achievement notification for reaching 1e40 (the new end)
-            if (gameState.cosmicEnergy >= 1e40 && !gameState.shownUltimateNotification) {
-                gameState.shownUltimateNotification = true;
-                showNotification('🌟 ULTIMATE ACHIEVEMENT: You have reached 1e40 Cosmic Energy! The theoretical limit of this universe!');
-                
-                // Special celebration effect
-                setTimeout(() => {
-                    showNotification('👑 COSMIC EMPEROR: You have conquered the infinite cosmos! Congratulations on reaching the end!');
-                }, 3000);
-            }
-            
-            const { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier } = calculateMultipliers();
+            const { energyMultiplier, darkMatterMultiplier } = calculateMultipliers();
             
             // Calculate age acceleration from temporal upgrades
             let ageMultiplier = 1;
@@ -1658,12 +1473,6 @@
             const hyperspeedLevel = gameState.upgrades['hyperspeedEvolution'] || 0;
             const temporalSuperchargeLevel = gameState.upgrades['temporalSupercharge'] || 0;
             const universalBuffLevel = gameState.upgrades['universalBuff'] || 0;
-            
-            // Apply Time Booster upgrade
-            const timeBoosterLevel = gameState.upgrades['timeBooster'] || 0;
-            if (timeBoosterLevel > 0) {
-                ageMultiplier *= 2;
-            }
             
             if (temporalDilationLevel > 0) ageMultiplier *= 2;
             if (hyperspeedLevel > 0) ageMultiplier *= 2;
@@ -1728,25 +1537,6 @@
             gameState.cosmicEnergy = Math.min(gameState.cosmicEnergy + energyGain, 1e308);
             gameState.universeAge = Math.min(gameState.universeAge + ageGain, 1e100);
             
-            // Generate black hole mass if unlocked
-            if (gameState.blackHoleUnlocked) {
-                const massGeneration = calculateBlackHoleMassGeneration() * 0.1;
-                gameState.blackHoleMass += massGeneration;
-                
-                // Check for unit conversion (grams to kilograms)
-                if (gameState.blackHoleUnit === 'grams' && gameState.blackHoleMass >= 1000) {
-                    gameState.blackHoleMass = gameState.blackHoleMass / 1000;
-                    gameState.blackHoleUnit = 'kilograms';
-                    showNotification('⚫ BLACK HOLE EVOLUTION: Your black hole has grown to 1 kilogram!');
-                }
-                
-                // Check for scientific notation notification (at 1000 kilograms)
-                if (gameState.blackHoleUnit === 'kilograms' && gameState.blackHoleMass >= 1000 && !gameState.shownBlackHoleScientificNotification) {
-                    gameState.shownBlackHoleScientificNotification = true;
-                    showNotification('⚫ BLACK HOLE NOTATION: Black Hole mass now uses scientific notation!');
-                }
-            }
-            
             // Scientific notification at 100 trillion
             if (gameState.cosmicEnergy >= 100000000000000 && !gameState.shownTrillionNotification) {
                 gameState.shownTrillionNotification = true;
@@ -1757,6 +1547,17 @@
             if (gameState.cosmicEnergy >= 1000000000000 && !gameState.shownFirstTrillionNotification) {
                 gameState.shownFirstTrillionNotification = true;
                 showNotification('🌌 COSMIC MILESTONE: First trillion energy achieved! The universe expands rapidly!');
+            }
+            
+            // Special achievement notification for reaching 1e40 (the new end)
+            if (gameState.cosmicEnergy >= 1e40 && !gameState.shownUltimateNotification) {
+                gameState.shownUltimateNotification = true;
+                showNotification('🌟 ULTIMATE ACHIEVEMENT: You have reached 1e40 Cosmic Energy! The theoretical limit of this universe!');
+                
+                // Special celebration effect
+                setTimeout(() => {
+                    showNotification('👑 COSMIC EMPEROR: You have conquered the infinite cosmos! Congratulations on reaching the end!');
+                }, 3000);
             }
             
             // Generate dark matter passively if upgrade is bought
@@ -1803,14 +1604,6 @@
             document.getElementById('quantumLeaps').textContent = formatNumber(gameState.quantumLeaps, true);
             document.getElementById('dustAmount').textContent = formatNumber(gameState.dust);
             document.getElementById('dustCollections').textContent = gameState.dustCollections;
-            
-            // Update black hole display if unlocked
-            if (gameState.blackHoleUnlocked) {
-                const massGeneration = calculateBlackHoleMassGeneration();
-                document.getElementById('blackHoleMass').textContent = formatNumber(gameState.blackHoleMass, false, true);
-                document.getElementById('blackHoleMassDisplay').textContent = formatNumber(gameState.blackHoleMass, false, true);
-                document.getElementById('massGeneration').textContent = formatNumber(massGeneration) + '/sec';
-            }
             
             // Update dust collection button
             const dustBtn = document.getElementById('collectDustBtn');
@@ -1874,10 +1667,6 @@
             updateUpgradeSection('darkMatterUpgrades', darkMatterUpgrades, 'darkMatter');
             updateUpgradeSection('quantumUpgrades', quantumUpgrades, 'quantumLeaps');
             updateUpgradeSection('dustUpgrades', dustUpgrades, 'dust');
-            
-            if (gameState.blackHoleUnlocked) {
-                updateUpgradeSection('blackHoleUpgrades', blackHoleUpgrades, 'blackHoleMass');
-            }
         }
 
         function updateUpgradeSection(containerId, upgrades, currencyType) {
@@ -1895,9 +1684,7 @@
                 
                 const currency = gameState[currencyType === 'cosmicEnergy' ? 'cosmicEnergy' : 
                                            currencyType === 'darkMatter' ? 'darkMatter' : 
-                                           currencyType === 'dust' ? 'dust' : 
-                                           currencyType === 'quantumLeaps' ? 'quantumLeaps' : 
-                                           currencyType === 'blackHoleMass' ? 'blackHoleMass' : 0];
+                                           currencyType === 'dust' ? 'dust' : 'quantumLeaps'];
                 const canAfford = currency >= cost;
                 const isMaxed = level >= upgrade.maxLevel;
 
@@ -1910,9 +1697,7 @@
                 } else {
                     const costLabel = currencyType === 'cosmicEnergy' ? 'Cosmic Energy' : 
                                     currencyType === 'darkMatter' ? 'Dark Matter' : 
-                                    currencyType === 'dust' ? 'Dust' : 
-                                    currencyType === 'quantumLeaps' ? 'Quantum Leaps' : 
-                                    currencyType === 'blackHoleMass' ? 'Black Hole Mass' : '';
+                                    currencyType === 'dust' ? 'Dust' : 'Quantum Leaps';
                     costDisplay = `Cost: ${formatNumber(cost)} ${costLabel}`;
                 }
                 
@@ -2014,11 +1799,20 @@
                             if (improvementAgainLevel > 0) {
                                 const improvementMultiplier = Math.log10(Math.max(gameState.cosmicEnergy, 1)) / 2;
                                 currentBoost *= improvementMultiplier;
+                                effectText += ` (Current: x${formatNumber(currentBoost)} with Improvement Again)`;
+                            } else {
+                                effectText += ` (Current: x${formatNumber(currentBoost)})`;
                             }
-                            
-                            effectText += ` (Current: x${formatNumber(currentBoost)})`;
                         } else {
                             effectText += ' (Requires Awesome Boost upgrade)';
+                        }
+                    } else if (upgrade.id === 'improvementAgain') {
+                        const awesomeBoostLevel = gameState.upgrades['awesomeBoost'] || 0;
+                        if (awesomeBoostLevel > 0) {
+                            const improvementMultiplier = Math.log10(Math.max(gameState.cosmicEnergy, 1)) / 2;
+                            effectText += ` (Current multiplier: x${formatNumber(improvementMultiplier)})`;
+                        } else {
+                            effectText += ' (Requires Awesome Boost upgrade to work)';
                         }
                     } else if (upgrade.id === 'unoriginalAwesomeBoost') {
                         let currentBoost = Math.log(Math.max(gameState.cosmicEnergy, 1)) / Math.log(100) / 5 + 1;
@@ -2027,9 +1821,20 @@
                         const boostItElseLevel = gameState.upgrades['boostItElse'] || 0;
                         if (boostItElseLevel > 0) {
                             currentBoost = Math.pow(currentBoost, 1.4);
+                            effectText += ` (Current: x${formatNumber(currentBoost)} with Boost It Else ^1.4)`;
+                        } else {
+                            effectText += ` (Current: x${formatNumber(currentBoost)})`;
                         }
-                        
-                        effectText += ` (Current: x${formatNumber(currentBoost)})`;
+                    } else if (upgrade.id === 'boostItElse') {
+                        const unoriginalAwesomeBoostLevel = gameState.upgrades['unoriginalAwesomeBoost'] || 0;
+                        if (unoriginalAwesomeBoostLevel > 0) {
+                            const baseBoost = Math.log(Math.max(gameState.cosmicEnergy, 1)) / Math.log(100) / 5 + 1;
+                            const poweredBoost = Math.pow(baseBoost, 1.4);
+                            const powerIncrease = poweredBoost / baseBoost;
+                            effectText += ` (Current power increase: x${formatNumber(powerIncrease)})`;
+                        } else {
+                            effectText += ' (Requires Unoriginal Awesome Boost to work)';
+                        }
                     } else if (upgrade.id === 'energyBoostsDarkMatter') {
                         const currentBoost = Math.pow(gameState.cosmicEnergy, 0.08) / 1.3 + 1;
                         effectText += ` (Current: x${formatNumber(currentBoost)})`;
@@ -2293,13 +2098,6 @@
                         if (thisCanBeGeneratedLevel > 0) {
                             const offlineDustGain = 0.001 * offlineSeconds; // Same rate when offline
                             gameState.dust += offlineDustGain;
-                        }
-                        
-                        // Generate black hole mass passively if unlocked
-                        if (gameState.blackHoleUnlocked) {
-                            const massGeneration = calculateBlackHoleMassGeneration();
-                            const offlineMassGain = (massGeneration * offlineSeconds) / 5;
-                            gameState.blackHoleMass += offlineMassGain;
                         }
                         
                         // Show offline progress notification
