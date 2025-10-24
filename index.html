@@ -541,53 +541,7 @@
             {id: 'bruhTooUnoriginal', name: 'Bruh Too Unoriginal', icon: '🔗🌑', cost: 15000000000000, costType: 'darkMatter', effect: 'x5 cosmic energy', maxLevel: 1, multiplier: 5},
             {id: 'justGetIt', name: 'Just Get It', icon: '💥', cost: 69000000000000, costType: 'darkMatter', effect: 'x20 cosmic energy', maxLevel: 1, multiplier: 20},
             {id: 'alr', name: 'alr', icon: '👌', cost: 2000000000000000, costType: 'darkMatter', effect: 'x4 cosmic energy', maxLevel: 1, multiplier: 4},
-            {id: 'pushingUpToAllInOne', name: 'pushing up to all in one', icon: '⬆️', cost: 10000000000000000, costType: 'darkMatter', effect: 'x3 cosmic energy before 1e34 cosmic energy', maxLevel: 1},
-            {id: 'leapTechnology', name: 'leap technology', icon: '🚀🔮', cost: 100000000000000000, costType: 'darkMatter', effect: 'x2 quantum leaps', maxLevel: 1},
-            {id: 'cheapScaleButGood', name: 'cheap scale but good', icon: '💰⚡', cost: 7e17, costType: 'darkMatter', effect: 'x2.5 cosmic energy', multiplier: 2.5, maxLevel: 1},
-            {id: 'continue', name: 'continue', icon: '🔄⚡', cost: 6e20, costType: 'darkMatter', effect: 'Cosmic energy boosts itself again: (energy^0.005)+1', maxLevel: 1, showBoost: true},
-            {id: 'scaleReduce', name: 'Scale Reduce', icon: '📉⚖️', cost: 2e23, costType: 'darkMatter', effect: 'Reduces milestone scaling: Milestone 10 = 150M, then x3 scaling (instead of 500M x10)', maxLevel: 1},
-            {id: 'boost', name: 'boost', icon: '🚀', cost: 1e23, costType: 'darkMatter', effect: 'x2 dark matter', multiplier: 2, maxLevel: 1, multipliesDarkMatter: true},
-            {id: 'ifYouEverNeedIt', name: 'if you ever need it', icon: '🆘⚡', cost: 7e24, costType: 'darkMatter', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
-            {id: 'awesomeDarkMatter', name: 'AWESOME!', icon: '🔥🌑', cost: 1e25, costType: 'darkMatter', effect: 'Dark matter raised to a power of 1.025', maxLevel: 1, showBoost: true}
-        ];
-
-        const quantumUpgrades = [
-            {id: 'quantumBoost1', name: 'Quantum Boost I', icon: '⚡', cost: 1, costType: 'quantumLeaps', effect: 'x1.5 cosmic energy and x1.5 dark matter', multiplier: 1.5, maxLevel: 1},
-            {id: 'quantumBoost2', name: 'Quantum Boost II', icon: '⚡⚡', cost: 3, costType: 'quantumLeaps', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
-            {id: 'darkMatterGen', name: 'Dark Matter Generation', icon: '🌑⚡', cost: 5, costType: 'quantumLeaps', effect: 'Generate 1% dark matter from potential reset', maxLevel: 1},
-            {id: 'unlockMilestones', name: 'Unlock Milestones', icon: '🏆', cost: 10, costType: 'quantumLeaps', effect: 'Unlock milestone system', maxLevel: 1},
-            {id: 'quantumBoost', name: 'Quantum Boost', icon: '🔮⚡', cost: 20, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', multiplier: 2, maxLevel: 1},
-            {id: 'quantumSelfBoost', name: 'Quantum Self-Enhancement', icon: '🔄', cost: 40, costType: 'quantumLeaps', effect: 'Quantum leaps boost themselves: (quantumLeaps^0.1)×2+1', maxLevel: 1, showBoost: true},
-            {id: 'quantumMechanics', name: 'Quantum Mechanics', icon: '⚛️', cost: 61, costType: 'quantumLeaps', effect: 'x2 dark matter and x2 cosmic energy', multiplier: 2, maxLevel: 1},
-            {id: 'energyLeap', name: 'Energy Leap', icon: '⚡🚀', cost: 210, costType: 'quantumLeaps', effect: 'x3 cosmic energy', multiplier: 3, maxLevel: 1},
-            {id: 'universalBuff', name: 'Universal Buff', icon: '🌟💪', cost: 400, costType: 'quantumLeaps', effect: 'x3 age acceleration and x2 cosmic energy', maxLevel: 1},
-            {id: 'universalRecover', name: 'Universal Recover', icon: '🔄', cost: 100, costType: 'quantumLeaps', effect: 'x10 cosmic energy but nullified upon reaching your best cosmic energy amount', maxLevel: 1, multiplier: 10},
-            {id: 'bestRecordResonance', name: 'Best Record Resonance', icon: '🏆', cost: 500, costType: 'quantumLeaps', effect: 'x5 cosmic energy after Universal Recover boost is gone', maxLevel: 1, multiplier: 5},
-            {id: 'greatOne', name: 'Great One', icon: '⭐', cost: 1000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', maxLevel: 1, multiplier: 2},
-            {id: 'thisIsPeak', name: 'This is Peak', icon: '🔥⭐', cost: 1300, costType: 'quantumLeaps', effect: 'Cosmic energy boosts itself again: (energy^0.02)+1.2', maxLevel: 1, showBoost: true},
-            {id: 'ohItWasSlow', name: 'Oh It Was Slow', icon: '🌑🚀', cost: 2000, costType: 'quantumLeaps', effect: 'Improves dark matter generation to 7% and x2.5 quantum leaps', maxLevel: 1},
-            {id: 'youNeedTimewall', name: 'You Need Timewall', icon: '⏰🛡️', cost: 7000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
-            {id: 'actualTimewall', name: 'actual timewall', icon: '🛡️⏰', cost: 20000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
-            {id: 'wasThatUpgradeTooOp', name: 'was that upgrade too op?', icon: '🤔💥', cost: 60000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x1.5 dark matter', maxLevel: 1, multiplier: 2},
-            {id: 'improvementAgain', name: 'improvement again', icon: '🔥⚡', cost: 150000, costType: 'quantumLeaps', effect: 'Awesome Boost upgrade is multiplied based on cosmic energy: (log₁₀(energy)/2)', maxLevel: 1, showBoost: true},
-            {id: 'improvableBoost', name: 'Improvable Boost', icon: '📈', cost: 400000, costType: 'quantumLeaps', effect: 'x3 cosmic energy and increases by 2% per upgrade (dust upgrades count)', maxLevel: 1, showBoost: true},
-            {id: 'dontGotAlotQuantumLeaps', name: 'dont got alot quantum leaps upgrade?', icon: '🤷‍♂️⚡', cost: 2000000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', maxLevel: 1, multiplier: 2},
-            {id: 'boostItElse', name: 'boost it else', icon: '🚀📈', cost: 2500000, costType: 'quantumLeaps', effect: '^1.4 effect of unoriginal awesome boost upgrade', maxLevel: 1, showBoost: true},
-            {id: 'energyFromSupernova', name: 'Energy from Supernova', icon: '🌟💥', cost: 30000000, costType: 'quantumLeaps', effect: 'x5 cosmic energy from supernova power', multiplier: 5, maxLevel: 1},
-            {id: 'amazingQuantumLeaps', name: 'AMAZING!', icon: '🚀🔮', cost: 100000000, costType: 'quantumLeaps', effect: 'Quantum leaps raised to a power of 1.015', maxLevel: 1, showBoost: true}
-        ];
-
-        const dustUpgrades = [
-            {id: 'sproutInspired', name: 'This is inspired by tutol sprouts mechanic', icon: '🌱', cost: 1, costType: 'dust', effect: 'Gain 2 dust (one-time)', maxLevel: 1, givesInstantDust: true},
-            {id: 'boost1', name: 'Boost I', icon: '⚡', cost: 8, costType: 'dust', effect: 'x1.2 cosmic energy', multiplier: 1.2, maxLevel: 1},
-            {id: 'boost2', name: 'Boost II', icon: '⚡⚡', cost: 10, costType: 'dust', effect: 'x1.2 cosmic energy', multiplier: 1.2, maxLevel: 1},
-            {id: 'boost11', name: 'Boost I.I', icon: '🌑⚡', cost: 12, costType: 'dust', effect: 'x1.3 dark matter', multiplier: 1.3, maxLevel: 1, multipliesDarkMatter: true},
-            {id: 'boost3', name: 'Boost III', icon: '⚡⚡⚡', cost: 20, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
-            {id: 'greatboost1', name: 'Great Boost I', icon: '🔮⚡', cost: 25, costType: 'dust', effect: 'x1.3 quantum leaps', multiplier: 1.3, maxLevel: 1, multipliesQuantumLeaps: true},
-            {id: 'improve', name: 'Improve Collection Time', icon: '⏰', cost: 30, costType: 'dust', effect: 'Decrease collection time to 50 minutes', maxLevel: 1},
-            {id: 'thisCanBeGenerated', name: 'this can be generated?', icon: '✨🔧', cost: 50, costType: 'dust', effect: 'Generate dust at rate of 0.001 per second', maxLevel: 1}
-        ];
-                // Milestone definitions - dynamically calculated
+                    // Milestone definitions - dynamically calculated
         function getMilestoneRequirement(index) {
             const baseRequirements = [10, 100, 1000, 10000, 100000, 500000, 2000000, 10000000, 50000000];
             
@@ -1598,7 +1552,156 @@
             
             return { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier };
         }
-                // Update display
+                // Game loop
+        function gameLoop() {
+            // Update best cosmic energy record
+            gameState.bestCosmicEnergy = Math.max(gameState.bestCosmicEnergy, gameState.cosmicEnergy);
+            
+            const { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier } = calculateMultipliers();
+            
+            // Calculate age acceleration from temporal upgrades
+            let ageMultiplier = 1;
+            const temporalDilationLevel = gameState.upgrades['temporalDilation'] || 0;
+            const hyperspeedLevel = gameState.upgrades['hyperspeedEvolution'] || 0;
+            const temporalSuperchargeLevel = gameState.upgrades['temporalSupercharge'] || 0;
+            const universalBuffLevel = gameState.upgrades['universalBuff'] || 0;
+            
+            if (temporalDilationLevel > 0) ageMultiplier *= 2;
+            if (hyperspeedLevel > 0) ageMultiplier *= 2;
+            if (universalBuffLevel > 0) ageMultiplier *= 3;
+            if (temporalSuperchargeLevel > 0) {
+                const superchargeBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.03) / 1.11 + 1;
+                ageMultiplier *= superchargeBoost;
+            }
+            
+            // Apply supernova milestone age effects
+            for (let i = 0; i < gameState.supernovaMilestones.length; i++) {
+                if (gameState.supernovaMilestones[i] && i === 0) {
+                    // First milestone gives x1.5 universe age
+                    ageMultiplier *= 1.5;
+                }
+            }
+            
+            // Apply "Nerfing Nerf" upgrade - age boosts itself
+            const nerfingNerfLevel = gameState.upgrades['nerfingNerf'] || 0;
+            if (nerfingNerfLevel > 0) {
+                const ageBoost = Math.pow(gameState.universeAge, 0.08) + 1;
+                ageMultiplier *= ageBoost;
+            }
+            
+            // Apply "all in one" upgrade age effects
+            const allInOneLevel = gameState.upgrades['allInOne'] || 0;
+            if (allInOneLevel > 0) {
+                // Age boost from cosmic energy, dark matter, quantum leaps
+                const allInOneAgeBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.001) + 1;
+                ageMultiplier *= allInOneAgeBoost;
+                
+                // Age increases itself by x1.03 per OOM
+                const ageOOMs = Math.log10(Math.max(gameState.universeAge, 1));
+                const ageSelfBoost = Math.pow(1.03, ageOOMs);
+                ageMultiplier *= ageSelfBoost;
+            }
+            
+            // Age divider after 1000 eons
+            if (gameState.universeAge >= 1000) {
+                ageMultiplier /= Math.pow(Math.pow(gameState.universeAge, 0.21), 0.95) + 1;
+            }
+            
+            // Additional age divider after 1200 eons
+            if (gameState.universeAge >= 1200) {
+                ageMultiplier /= 1.5;
+            }
+            
+            // Check for galactic events
+            let galacticEventBoost = 1;
+            const galacticEventsLevel = gameState.upgrades['galacticEvents'] || 0;
+            if (galacticEventsLevel > 0) {
+                if (Math.random() < 0.15) { // 15% chance
+                    galacticEventBoost = 30;
+                    showNotification('🌠 GALACTIC EVENT: x30 Cosmic Energy this tick!');
+                }
+            }
+            
+            // Generate energy with overflow protection
+            let energyGain = gameState.energyGeneration * energyMultiplier * galacticEventBoost * 0.1;
+            let ageGain = 0.1 * ageMultiplier;
+            
+            // Prevent infinite/NaN values
+            if (!isFinite(energyGain) || energyGain > 1e100) {
+                energyGain = Math.min(energyGain, 1e100);
+            }
+            if (!isFinite(ageGain) || ageGain > 1000) {
+                ageGain = Math.min(ageGain, 1000);
+            }
+            
+            gameState.cosmicEnergy = Math.min(gameState.cosmicEnergy + energyGain, 1e308);
+            gameState.universeAge = Math.min(gameState.universeAge + ageGain, 1e100);
+            
+            // Scientific notification at 100 trillion
+            if (gameState.cosmicEnergy >= 100000000000000 && !gameState.shownTrillionNotification) {
+                gameState.shownTrillionNotification = true;
+                showNotification('🔬 SCIENTIFIC BREAKTHROUGH: Universe reaches 100 trillion energy units! Quantum mechanics unlocked!');
+            }
+            
+            // Scientific notification at 1 trillion  
+            if (gameState.cosmicEnergy >= 1000000000000 && !gameState.shownFirstTrillionNotification) {
+                gameState.shownFirstTrillionNotification = true;
+                showNotification('🌌 COSMIC MILESTONE: First trillion energy achieved! The universe expands rapidly!');
+            }
+            
+            // Supernova tab visibility notification
+            if (gameState.cosmicEnergy >= 1e51 && !gameState.shownSupernovaNotification) {
+                gameState.shownSupernovaNotification = true;
+                showNotification('💥 SUPERNOVA UNLOCKED: The power of stellar destruction is now yours to command!');
+            }
+            
+            // Special achievement notification for reaching 1e40 (the new end)
+            if (gameState.cosmicEnergy >= 1e40 && !gameState.shownUltimateNotification) {
+                gameState.shownUltimateNotification = true;
+                showNotification('🌟 ULTIMATE ACHIEVEMENT: You have reached 1e40 Cosmic Energy! The theoretical limit of this universe!');
+                
+                // Special celebration effect
+                setTimeout(() => {
+                    showNotification('👑 COSMIC EMPEROR: You have conquered the infinite cosmos! Congratulations on reaching the end!');
+                }, 3000);
+            }
+            
+            // Generate dark matter passively if upgrade is bought
+            const darkMatterGenLevel = gameState.upgrades['darkMatterGen'] || 0;
+            const ohItWasSlowLevel = gameState.upgrades['ohItWasSlow'] || 0;
+            
+            if (darkMatterGenLevel > 0) {
+                const potentialDarkMatter = Math.pow(gameState.cosmicEnergy, 0.13) + 1;
+                let genRate = 0.01; // 1%
+                
+                // Check milestone count for generation rate improvements
+                let milestoneCount = 0;
+                for (let i = 0; i < gameState.milestones.length; i++) {
+                    if (gameState.milestones[i]) {
+                        milestoneCount++;
+                    }
+                }
+                
+                if (milestoneCount >= 1) genRate = 0.03; // 3% (milestone 1)
+                if (ohItWasSlowLevel > 0) genRate = 0.07; // 7% (upgrade override)
+                if (milestoneCount >= 8) genRate = 0.15; // 15% (milestone 8, highest priority)
+                
+                gameState.darkMatter += potentialDarkMatter * genRate * darkMatterMultiplier * 0.1;
+            }
+            
+            // Generate dust passively if upgrade is bought
+            const thisCanBeGeneratedLevel = gameState.upgrades['thisCanBeGenerated'] || 0;
+            if (thisCanBeGeneratedLevel > 0) {
+                gameState.dust += 0.001 * 0.1; // 0.001 per second, scaled by 0.1 tick rate
+            }
+            
+            // Update generation rate display
+            gameState.energyGeneration = gameState.energyGeneration * energyMultiplier;
+            
+            updateDisplay();
+        }
+
+        // Update display
         function updateDisplay() {
             document.getElementById('cosmicEnergy').textContent = formatNumber(gameState.cosmicEnergy);
             document.getElementById('energyGeneration').textContent = formatNumber(gameState.energyGeneration) + '/sec';
