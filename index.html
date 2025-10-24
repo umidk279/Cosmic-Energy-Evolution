@@ -274,6 +274,64 @@
             color: #4fd3a7;
         }
 
+        /* Supernova specific styles */
+        .supernova-tab {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border: 1px solid #ff6b9d;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .supernova-stat-card {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border: 1px solid #ff6b9d;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(255, 107, 157, 0.3);
+        }
+
+        .supernova-milestone {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 107, 157, 0.1) 100%);
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .supernova-milestone.completed {
+            border-color: #ff6b9d;
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+        }
+
+        .supernova-button {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ffc107 100%);
+            color: #0a0a2e;
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
+        }
+
+        .supernova-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .supernova-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         @media (max-width: 768px) {
             .title {
                 font-size: 2rem;
@@ -315,6 +373,7 @@
             <button class="main-button" id="bigBangReset">🌀 Big Bang Reset (resets everything)</button>
             <button class="main-button" id="stellarCollapse" style="display: none;">⭐ Stellar Collapse</button>
             <button class="main-button" id="quantumLeap" style="display: none;">🔮 Quantum Leap</button>
+            <button class="supernova-button" id="supernovaReset" style="display: none;">💥 Supernova Reset</button>
         </div>
 
         <div class="tabs">
@@ -322,6 +381,7 @@
             <div class="tab" data-tab="dark-matter" style="display: none;">🌑 Dark Matter Technologies</div>
             <div class="tab" data-tab="quantum" style="display: none;">🔮 Quantum Mechanics</div>
             <div class="tab" data-tab="dust">✨ Dust</div>
+            <div class="tab" data-tab="supernova" style="display: none;">💥 Supernova</div>
         </div>
 
         <div class="tab-content active" id="cosmic-research">
@@ -359,6 +419,25 @@
             </div>
             <div class="upgrades-grid" id="dustUpgrades"></div>
         </div>
+
+        <div class="tab-content" id="supernova">
+            <div class="supernova-stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Supernova Count</div>
+                <div class="stat-value" id="supernovaCount">0</div>
+            </div>
+            <div class="supernova-stat-card" style="margin-bottom: 20px;">
+                <div class="stat-label">Next Supernova Requirement</div>
+                <div class="stat-value" id="supernovaRequirement">5.00e53</div>
+            </div>
+            <div class="buttons-row" style="margin-bottom: 30px;">
+                <button class="supernova-button" id="supernovaReset">💥 Supernova Reset</button>
+            </div>
+            <div class="supernova-tab">
+                <h3 style="color: #ff6b9d; margin-bottom: 20px; text-align: center;">🌟 SUPERNOVA MILESTONES</h3>
+                <div id="supernovaMilestones"></div>
+            </div>
+            <div class="upgrades-grid" id="supernovaUpgrades"></div>
+        </div>
     </div>
 
     <div class="notification" id="notification"></div>
@@ -390,7 +469,12 @@
             shownQuantumScientificNotification: false,
             shownQuantumScientificNotationChange: false,
             shownQuantumLeapTrillionNotification: false,
-            shownQuantumScientificNotationChange: false
+            shownQuantumScientificNotationChange: false,
+            // NEW: Supernova properties
+            supernovaCount: 0,
+            supernovaRequirement: 5e53,
+            supernovaMilestones: [],
+            shownSupernovaNotification: false
         };
 
         // Upgrade definitions
@@ -487,8 +571,8 @@
             {id: 'actualTimewall', name: 'actual timewall', icon: '🛡️⏰', cost: 20000, costType: 'quantumLeaps', effect: 'x3 dark matter and x3 cosmic energy', maxLevel: 1, multiplier: 3},
             {id: 'wasThatUpgradeTooOp', name: 'was that upgrade too op?', icon: '🤔💥', cost: 60000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x1.5 dark matter', maxLevel: 1, multiplier: 2},
             {id: 'improvementAgain', name: 'improvement again', icon: '🔥⚡', cost: 150000, costType: 'quantumLeaps', effect: 'Awesome Boost upgrade is multiplied based on cosmic energy: (log₁₀(energy)/2)', maxLevel: 1, showBoost: true},
-            {id: 'improvableBoost', name: 'Improvable Boost', icon: '📈', cost: 400000, costType: 'quantumLeaps', effect: 'x3 cosmic energy and increases by 2% for every upgrade (dust upgrades count)', maxLevel: 1, showBoost: true},
-            {id: 'dontGotAlotQuantumLeaps', name: 'dont got alot quantum leaps upgrade?', icon: '🤷‍♂️⚡', cost: 2000000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', multiplier: 2, maxLevel: 1},
+            {id: 'improvableBoost', name: 'Improvable Boost', icon: '📈', cost: 400000, costType: 'quantumLeaps', effect: 'x3 cosmic energy and increases by 2% per upgrade (dust upgrades count)', maxLevel: 1, showBoost: true},
+            {id: 'dontGotAlotQuantumLeaps', name: 'dont got alot quantum leaps upgrade?', icon: '🤷‍♂️⚡', cost: 2000000, costType: 'quantumLeaps', effect: 'x2 cosmic energy and x2 dark matter', maxLevel: 1, multiplier: 2},
             {id: 'boostItElse', name: 'boost it else', icon: '🚀📈', cost: 2500000, costType: 'quantumLeaps', effect: '^1.4 effect of unoriginal awesome boost upgrade', maxLevel: 1, showBoost: true},
             {id: 'energyFromSupernova', name: 'Energy from Supernova', icon: '🌟💥', cost: 30000000, costType: 'quantumLeaps', effect: 'x5 cosmic energy from supernova power', multiplier: 5, maxLevel: 1},
             {id: 'amazingQuantumLeaps', name: 'AMAZING!', icon: '🚀🔮', cost: 100000000, costType: 'quantumLeaps', effect: 'Quantum leaps raised to a power of 1.015', maxLevel: 1, showBoost: true}
@@ -496,8 +580,8 @@
 
         const dustUpgrades = [
             {id: 'sproutInspired', name: 'This is inspired by tutol sprouts mechanic', icon: '🌱', cost: 1, costType: 'dust', effect: 'Gain 2 dust (one-time)', maxLevel: 1, givesInstantDust: true},
-            {id: 'boost1', name: 'Boost I', icon: '⚡', cost: 8, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
-            {id: 'boost2', name: 'Boost II', icon: '⚡⚡', cost: 10, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
+            {id: 'boost1', name: 'Boost I', icon: '⚡', cost: 8, costType: 'dust', effect: 'x1.2 cosmic energy', multiplier: 1.2, maxLevel: 1},
+            {id: 'boost2', name: 'Boost II', icon: '⚡⚡', cost: 10, costType: 'dust', effect: 'x1.2 cosmic energy', multiplier: 1.2, maxLevel: 1},
             {id: 'boost11', name: 'Boost I.I', icon: '🌑⚡', cost: 12, costType: 'dust', effect: 'x1.3 dark matter', multiplier: 1.3, maxLevel: 1, multipliesDarkMatter: true},
             {id: 'boost3', name: 'Boost III', icon: '⚡⚡⚡', cost: 20, costType: 'dust', effect: 'x1.4 cosmic energy', multiplier: 1.4, maxLevel: 1},
             {id: 'greatboost1', name: 'Great Boost I', icon: '🔮⚡', cost: 25, costType: 'dust', effect: 'x1.3 quantum leaps', multiplier: 1.3, maxLevel: 1, multipliesQuantumLeaps: true},
@@ -508,6 +592,19 @@
             {id: 'thisCanBeGenerated', name: 'this can be generated?', icon: '✨🔧', cost: 50, costType: 'dust', effect: 'Generate dust at rate of 0.001 per second', maxLevel: 1}
         ];
 
+        // NEW: Supernova upgrades
+        const supernovaUpgrades = [
+            {id: 'supernovaResonance', name: 'Supernova Resonance', icon: '💫', cost: 1, costType: 'supernova', effect: 'x1.2 cosmic energy gain', multiplier: 1.2, maxLevel: 1},
+            {id: 'stellarRemnants', name: 'Stellar Remnants', icon: '⭐', cost: 2, costType: 'supernova', effect: 'x1.3 dark matter gain', multiplier: 1.3, maxLevel: 1},
+            {id: 'quantumEchoes', name: 'Quantum Echoes', icon: '🔮', cost: 3, costType: 'supernova', effect: 'x1.5 quantum leap gains', multiplier: 1.5, maxLevel: 1},
+            {id: 'temporalEchoes', name: 'Temporal Echoes', icon: '⏰', cost: 5, costType: 'supernova', effect: 'x1.2 universe age acceleration', multiplier: 1.2, maxLevel: 1},
+            {id: 'cosmicInheritance', name: 'Cosmic Inheritance', icon: '🌌', cost: 10, costType: 'supernova', effect: 'x1.1 all resource generation', multiplier: 1.1, maxLevel: 1},
+            {id: 'supernovaChain', name: 'Supernova Chain Reaction', icon: '💥', cost: 25, costType: 'supernova', effect: 'x1.4 cosmic energy and dark matter', multiplier: 1.4, maxLevel: 1},
+            {id: 'quantumCascade', name: 'Quantum Cascade', icon: '🌊', cost: 50, costType: 'supernova', effect: 'x2 quantum leap gains', multiplier: 2, maxLevel: 1},
+            {id: 'timeAcceleration', name: 'Time Acceleration Field', icon: '⚡', cost: 100, costType: 'supernova', effect: 'x1.5 universe age acceleration', multiplier: 1.5, maxLevel: 1},
+            {id: 'stellarAmplification', name: 'Stellar Amplification', icon: '🔥', cost: 200, costType: 'supernova', effect: 'x1.3 cosmic energy and dark matter', multiplier: 1.3, maxLevel: 1},
+            {id: 'quantumMastery', name: 'Quantum Mastery', icon: '👑', cost: 500, costType: 'supernova', effect: 'x2.5 quantum leap gains', multiplier: 2.5, maxLevel: 1}
+        ];
         // Milestone definitions - dynamically calculated
         function getMilestoneRequirement(index) {
             const baseRequirements = [10, 100, 1000, 10000, 100000, 500000, 2000000, 10000000, 50000000];
@@ -553,6 +650,12 @@
             'x2 all resource generation',                      // Milestone 18
             'x5 cosmic energy boost',                          // Milestone 19
             'x10 all resources (ultimate milestone)'           // Milestone 20
+        ];
+
+        // NEW: Supernova milestone definitions
+        const supernovaMilestoneEffects = [
+            'x2 cosmic energy, x2 dark matter, x2 quantum leaps, x1.5 universe age',  // Milestone 1
+            'x1.2 cosmic energy, x1.5 dark matter, x3 quantum leaps'                  // Milestone 2
         ];
 
         // Initialize stars
@@ -807,6 +910,45 @@
             return Math.floor(baseQuantum);
         }
 
+        // NEW: Supernova reset function
+        function performSupernovaReset() {
+            if (gameState.cosmicEnergy < gameState.supernovaRequirement) {
+                showNotification(`Need ${formatNumber(gameState.supernovaRequirement)} Cosmic Energy to perform Supernova Reset!`);
+                return;
+            }
+            
+            // Increment supernova counter
+            gameState.supernovaCount++;
+            
+            // Increase requirement for next supernova
+            gameState.supernovaRequirement += 1e10;
+            
+            // Reset cosmic energy, dark matter, quantum leaps, and their upgrades
+            gameState.cosmicEnergy = 1;
+            gameState.energyGeneration = 1;
+            gameState.universeAge = 0;
+            gameState.darkMatter = 0;
+            gameState.quantumLeaps = 0;
+            
+            // Reset cosmic and dark matter upgrades
+            for (let upgrade of cosmicUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            for (let upgrade of darkMatterUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            for (let upgrade of quantumUpgrades) {
+                gameState.upgrades[upgrade.id] = 0;
+            }
+            
+            // Check supernova milestones
+            updateSupernovaMilestones();
+            
+            showNotification(`💥 SUPERNOVA RESET COMPLETE! This is supernova #${gameState.supernovaCount}`);
+            updateDisplay();
+            updateUpgradeDisplay();
+        }
+
         // Big Bang reset
         function performBigBangReset() {
             const now = Date.now();
@@ -835,7 +977,11 @@
             gameState.quantumLeaps = 0;
             gameState.totalQuantumLeaps = 0;
             gameState.darkMatterGeneration = 0;
-            // Note: dust, dustCollections, and lastDustCollection are preserved
+            
+            // NEW: Reset supernova properties
+            gameState.supernovaCount = 0;
+            gameState.supernovaRequirement = 5e53;
+            gameState.supernovaMilestones = [];
             
             // Reset all upgrades except dust upgrades
             const dustUpgradeIds = dustUpgrades.map(u => u.id);
@@ -853,8 +999,10 @@
             // Hide advanced tabs and buttons
             document.querySelector('[data-tab="dark-matter"]').style.display = 'none';
             document.querySelector('[data-tab="quantum"]').style.display = 'none';
+            document.querySelector('[data-tab="supernova"]').style.display = 'none';
             document.getElementById('stellarCollapse').style.display = 'none';
             document.getElementById('quantumLeap').style.display = 'none';
+            document.getElementById('supernovaReset').style.display = 'none';
             
             // Switch back to cosmic research tab
             const tabs = document.querySelectorAll('.tab');
@@ -868,6 +1016,7 @@
             updateDisplay();
             updateUpgradeDisplay();
             updateMilestones();
+            updateSupernovaMilestones();
         }
 
         // Dark matter reset
@@ -910,6 +1059,7 @@
             updateDisplay();
             updateUpgradeDisplay();
         }
+
         function performStellarCollapse() {
             if (gameState.cosmicEnergy < 500000) {
                 showNotification('Need 500K Cosmic Energy to perform Stellar Collapse!');
@@ -1052,12 +1202,21 @@
             
             const currency = gameState[upgrade.costType === 'cosmicEnergy' ? 'cosmicEnergy' : 
                                     upgrade.costType === 'darkMatter' ? 'darkMatter' : 
-                                    upgrade.costType === 'dust' ? 'dust' : 'quantumLeaps'];
+                                    upgrade.costType === 'dust' ? 'dust' : 
+                                    upgrade.costType === 'supernova' ? 'supernovaCount' : 'quantumLeaps'];
             
             if (currency >= cost && currentLevel < upgrade.maxLevel) {
                 if (upgrade.costType === 'cosmicEnergy') gameState.cosmicEnergy -= cost;
                 else if (upgrade.costType === 'darkMatter') gameState.darkMatter -= cost;
                 else if (upgrade.costType === 'dust') gameState.dust -= cost;
+                else if (upgrade.costType === 'supernova') {
+                    // Supernova upgrades cost supernova count
+                    if (gameState.supernovaCount >= cost) {
+                        gameState.supernovaCount -= cost;
+                    } else {
+                        return;
+                    }
+                }
                 else gameState.quantumLeaps -= cost;
                 
                 gameState.upgrades[upgradeId] = currentLevel + 1;
@@ -1088,6 +1247,7 @@
         function calculateMultipliers() {
             let energyMultiplier = 1;
             let darkMatterMultiplier = 1;
+            let quantumLeapMultiplier = 1;
             
             // Cosmic upgrades
             for (let upgrade of cosmicUpgrades) {
@@ -1143,6 +1303,7 @@
             if (priceLeapLevel > 0) {
                 energyMultiplier *= 1.5;
                 darkMatterMultiplier *= 1.5;
+                quantumLeapMultiplier *= 1.5;
             }
             
             const awesomeBoostLevel = gameState.upgrades['awesomeBoost'] || 0;
@@ -1294,6 +1455,47 @@
                 }
             }
             
+            // NEW: Supernova upgrades
+            for (let upgrade of supernovaUpgrades) {
+                const level = gameState.upgrades[upgrade.id] || 0;
+                if (level > 0 && upgrade.multiplier) {
+                    if (upgrade.id === 'supernovaResonance') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'stellarRemnants') {
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'quantumEchoes' || upgrade.id === 'quantumCascade' || upgrade.id === 'quantumMastery') {
+                        quantumLeapMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'temporalEchoes' || upgrade.id === 'timeAcceleration') {
+                        // These affect age acceleration, handled in game loop
+                    } else if (upgrade.id === 'cosmicInheritance') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                        quantumLeapMultiplier *= Math.pow(upgrade.multiplier, level);
+                    } else if (upgrade.id === 'supernovaChain' || upgrade.id === 'stellarAmplification') {
+                        energyMultiplier *= Math.pow(upgrade.multiplier, level);
+                        darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
+                    }
+                }
+            }
+            
+            // NEW: Supernova milestone effects
+            for (let i = 0; i < gameState.supernovaMilestones.length; i++) {
+                if (gameState.supernovaMilestones[i]) {
+                    if (i === 0) {
+                        // First milestone: x2 cosmic energy, x2 dark matter, x2 quantum leaps, x1.5 universe age
+                        energyMultiplier *= 2;
+                        darkMatterMultiplier *= 2;
+                        quantumLeapMultiplier *= 2;
+                        // Age multiplier handled in game loop
+                    } else if (i === 1) {
+                        // Second milestone: x1.2 cosmic energy, x1.5 dark matter, x3 quantum leaps
+                        energyMultiplier *= 1.2;
+                        darkMatterMultiplier *= 1.5;
+                        quantumLeapMultiplier *= 3;
+                    }
+                }
+            }
+            
             // Milestone effects (only affect cosmic energy)
             let milestoneCount = 0;
             for (let i = 0; i < gameState.milestones.length; i++) {
@@ -1383,27 +1585,33 @@
                 // Base x1.2 multipliers
                 energyMultiplier *= 1.2;
                 darkMatterMultiplier *= 1.2;
+                quantumLeapMultiplier *= 1.2;
                 
                 // Time boosts all resources: (time/20k)^0.55/9+1
                 const timeBoost = Math.pow(gameState.universeAge / 20000, 0.55) / 9 + 1;
                 energyMultiplier *= timeBoost;
                 darkMatterMultiplier *= timeBoost;
+                quantumLeapMultiplier *= timeBoost;
                 
                 // Self-boosting effects
                 const energySelfBoost = Math.pow(gameState.cosmicEnergy, 0.005) + 1;
                 const darkMatterSelfBoost = Math.pow(gameState.darkMatter, 0.005) + 1;
+                const quantumSelfBoost = Math.pow(gameState.quantumLeaps, 0.006) + 1;
                 energyMultiplier *= energySelfBoost;
                 darkMatterMultiplier *= darkMatterSelfBoost;
+                quantumLeapMultiplier *= quantumSelfBoost;
                 
                 // ^1.005 base multiplier for all
                 energyMultiplier = Math.pow(Math.max(energyMultiplier, 1), 1.005);
                 darkMatterMultiplier = Math.pow(Math.max(darkMatterMultiplier, 1), 1.005);
+                quantumLeapMultiplier = Math.pow(Math.max(quantumLeapMultiplier, 1), 1.005);
                 
-                // x1.01 DM per 2 OOMs of cosmic energy
+                // x1.01 DM&QL per 2 OOMs of cosmic energy
                 const energyOOMs = Math.log10(Math.max(gameState.cosmicEnergy, 1));
                 const twoOOMBonus = Math.floor(energyOOMs / 2);
                 if (twoOOMBonus > 0) {
                     darkMatterMultiplier *= Math.pow(1.01, twoOOMBonus);
+                    quantumLeapMultiplier *= Math.pow(1.01, twoOOMBonus);
                 }
                 
                 // x1.1 energy till best record, x1.2 after
@@ -1414,8 +1622,6 @@
                 }
             }
             
-
-            
             // Dust upgrades
             for (let upgrade of dustUpgrades) {
                 const level = gameState.upgrades[upgrade.id] || 0;
@@ -1423,7 +1629,7 @@
                     if (upgrade.multipliesDarkMatter) {
                         darkMatterMultiplier *= Math.pow(upgrade.multiplier, level);
                     } else if (upgrade.multipliesQuantumLeaps) {
-                        // This will be handled in quantum leap calculations
+                        quantumLeapMultiplier *= Math.pow(upgrade.multiplier, level);
                     } else {
                         energyMultiplier *= Math.pow(upgrade.multiplier, level);
                     }
@@ -1456,16 +1662,18 @@
             if (!isFinite(darkMatterMultiplier) || darkMatterMultiplier > 1e308) {
                 darkMatterMultiplier = 1e308;
             }
+            if (!isFinite(quantumLeapMultiplier) || quantumLeapMultiplier > 1e308) {
+                quantumLeapMultiplier = 1e308;
+            }
             
-            return { energyMultiplier, darkMatterMultiplier };
+            return { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier };
         }
-
         // Game loop
         function gameLoop() {
             // Update best cosmic energy record
             gameState.bestCosmicEnergy = Math.max(gameState.bestCosmicEnergy, gameState.cosmicEnergy);
             
-            const { energyMultiplier, darkMatterMultiplier } = calculateMultipliers();
+            const { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier } = calculateMultipliers();
             
             // Calculate age acceleration from temporal upgrades
             let ageMultiplier = 1;
@@ -1480,6 +1688,25 @@
             if (temporalSuperchargeLevel > 0) {
                 const superchargeBoost = Math.pow(gameState.cosmicEnergy * gameState.darkMatter * Math.max(gameState.quantumLeaps, 1), 0.03) / 1.11 + 1;
                 ageMultiplier *= superchargeBoost;
+            }
+            
+            // NEW: Apply supernova temporal upgrades
+            const temporalEchoesLevel = gameState.upgrades['temporalEchoes'] || 0;
+            if (temporalEchoesLevel > 0) {
+                ageMultiplier *= 1.2;
+            }
+            
+            const timeAccelerationLevel = gameState.upgrades['timeAcceleration'] || 0;
+            if (timeAccelerationLevel > 0) {
+                ageMultiplier *= 1.5;
+            }
+            
+            // NEW: Apply supernova milestone age effects
+            for (let i = 0; i < gameState.supernovaMilestones.length; i++) {
+                if (gameState.supernovaMilestones[i] && i === 0) {
+                    // First milestone gives x1.5 universe age
+                    ageMultiplier *= 1.5;
+                }
             }
             
             // Apply "Nerfing Nerf" upgrade - age boosts itself
@@ -1549,6 +1776,12 @@
                 showNotification('🌌 COSMIC MILESTONE: First trillion energy achieved! The universe expands rapidly!');
             }
             
+            // NEW: Supernova tab visibility notification
+            if (gameState.cosmicEnergy >= 1e51 && !gameState.shownSupernovaNotification) {
+                gameState.shownSupernovaNotification = true;
+                showNotification('💥 SUPERNOVA UNLOCKED: The power of stellar destruction is now yours to command!');
+            }
+            
             // Special achievement notification for reaching 1e40 (the new end)
             if (gameState.cosmicEnergy >= 1e40 && !gameState.shownUltimateNotification) {
                 gameState.shownUltimateNotification = true;
@@ -1578,7 +1811,7 @@
                 
                 if (milestoneCount >= 1) genRate = 0.03; // 3% (milestone 1)
                 if (ohItWasSlowLevel > 0) genRate = 0.07; // 7% (upgrade override)
-                if (milestoneCount >= 9) genRate = 0.15; // 15% (milestone 9, highest priority)
+                if (milestoneCount >= 8) genRate = 0.15; // 15% (milestone 8, highest priority)
                 
                 gameState.darkMatter += potentialDarkMatter * genRate * darkMatterMultiplier * 0.1;
             }
@@ -1604,6 +1837,10 @@
             document.getElementById('quantumLeaps').textContent = formatNumber(gameState.quantumLeaps, true);
             document.getElementById('dustAmount').textContent = formatNumber(gameState.dust);
             document.getElementById('dustCollections').textContent = gameState.dustCollections;
+            
+            // NEW: Update supernova display
+            document.getElementById('supernovaCount').textContent = gameState.supernovaCount;
+            document.getElementById('supernovaRequirement').textContent = formatNumber(gameState.supernovaRequirement);
             
             // Update dust collection button
             const dustBtn = document.getElementById('collectDustBtn');
@@ -1656,6 +1893,22 @@
                 }
             }
             
+            // NEW: Show/hide supernova button and tab
+            const supernovaBtn = document.getElementById('supernovaReset');
+            if (gameState.cosmicEnergy >= 1e51) {
+                supernovaBtn.style.display = 'block';
+                document.querySelector('[data-tab="supernova"]').style.display = 'block';
+                
+                // Enable/disable supernova button based on requirement
+                if (gameState.cosmicEnergy >= gameState.supernovaRequirement) {
+                    supernovaBtn.disabled = false;
+                    supernovaBtn.textContent = `💥 Supernova Reset (#${gameState.supernovaCount + 1})`;
+                } else {
+                    supernovaBtn.disabled = true;
+                    supernovaBtn.textContent = `💥 Supernova Reset (Need ${formatNumber(gameState.supernovaRequirement)})`;
+                }
+            }
+            
             // Reset generation rate for next calculation
             const { energyMultiplier } = calculateMultipliers();
             gameState.energyGeneration = 1;
@@ -1667,6 +1920,7 @@
             updateUpgradeSection('darkMatterUpgrades', darkMatterUpgrades, 'darkMatter');
             updateUpgradeSection('quantumUpgrades', quantumUpgrades, 'quantumLeaps');
             updateUpgradeSection('dustUpgrades', dustUpgrades, 'dust');
+            updateUpgradeSection('supernovaUpgrades', supernovaUpgrades, 'supernova');
         }
 
         function updateUpgradeSection(containerId, upgrades, currencyType) {
@@ -1682,9 +1936,19 @@
                     cost = Math.floor(upgrade.cost * Math.pow(1.15, level));
                 }
                 
-                const currency = gameState[currencyType === 'cosmicEnergy' ? 'cosmicEnergy' : 
-                                           currencyType === 'darkMatter' ? 'darkMatter' : 
-                                           currencyType === 'dust' ? 'dust' : 'quantumLeaps'];
+                let currency;
+                if (currencyType === 'cosmicEnergy') {
+                    currency = gameState.cosmicEnergy;
+                } else if (currencyType === 'darkMatter') {
+                    currency = gameState.darkMatter;
+                } else if (currencyType === 'dust') {
+                    currency = gameState.dust;
+                } else if (currencyType === 'supernova') {
+                    currency = gameState.supernovaCount;
+                } else {
+                    currency = gameState.quantumLeaps;
+                }
+                
                 const canAfford = currency >= cost;
                 const isMaxed = level >= upgrade.maxLevel;
 
@@ -1697,7 +1961,8 @@
                 } else {
                     const costLabel = currencyType === 'cosmicEnergy' ? 'Cosmic Energy' : 
                                     currencyType === 'darkMatter' ? 'Dark Matter' : 
-                                    currencyType === 'dust' ? 'Dust' : 'Quantum Leaps';
+                                    currencyType === 'dust' ? 'Dust' : 
+                                    currencyType === 'supernova' ? 'Supernova Count' : 'Quantum Leaps';
                     costDisplay = `Cost: ${formatNumber(cost)} ${costLabel}`;
                 }
                 
@@ -1958,6 +2223,29 @@
             });
         }
 
+        // NEW: Update supernova milestones
+        function updateSupernovaMilestones() {
+            const supernovaMilestonesContainer = document.getElementById('supernovaMilestones');
+            supernovaMilestonesContainer.innerHTML = '<h3 style="color: #ff6b9d; margin-bottom: 20px; text-align: center;">🌟 SUPERNOVA MILESTONES</h3>';
+            
+            supernovaMilestoneEffects.forEach((effect, index) => {
+                const isCompleted = gameState.supernovaCount > index;
+                if (!gameState.supernovaMilestones[index]) gameState.supernovaMilestones[index] = isCompleted;
+                
+                const milestoneDiv = document.createElement('div');
+                milestoneDiv.className = `supernova-milestone ${isCompleted ? 'completed' : ''}`;
+                
+                milestoneDiv.innerHTML = `
+                    <div class="milestone-title">Supernova Milestone ${index + 1} ${isCompleted ? '✓' : ''}</div>
+                    <div>Requirement: Complete ${index + 1} supernova${index + 1 > 1 ? 's' : ''}</div>
+                    <div>Effect: ${effect}</div>
+                    <div>Progress: ${gameState.supernovaCount}/${index + 1}</div>
+                `;
+                
+                supernovaMilestonesContainer.appendChild(milestoneDiv);
+            });
+        }
+
         // Tab switching
         function initializeTabs() {
             const tabs = document.querySelectorAll('.tab');
@@ -1982,6 +2270,8 @@
             document.getElementById('stellarCollapse').addEventListener('click', performStellarCollapse);
             document.getElementById('quantumLeap').addEventListener('click', performQuantumLeap);
             document.getElementById('collectDustBtn').addEventListener('click', collectDust);
+            // NEW: Add supernova reset event listener
+            document.getElementById('supernovaReset').addEventListener('click', performSupernovaReset);
         }
 
         // Initialize game
@@ -1992,6 +2282,7 @@
             updateDisplay();
             updateUpgradeDisplay();
             updateMilestones();
+            updateSupernovaMilestones();
             
             // Start game loop
             setInterval(gameLoop, 100);
@@ -2114,6 +2405,7 @@
                     updateDisplay();
                     updateUpgradeDisplay();
                     updateMilestones();
+                    updateSupernovaMilestones();
                 }
             } catch (e) {
                 console.log('Load not available in this environment');
