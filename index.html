@@ -541,7 +541,7 @@
             {id: 'bruhTooUnoriginal', name: 'Bruh Too Unoriginal', icon: '🔗🌑', cost: 15000000000000, costType: 'darkMatter', effect: 'x5 cosmic energy', maxLevel: 1, multiplier: 5},
             {id: 'justGetIt', name: 'Just Get It', icon: '💥', cost: 69000000000000, costType: 'darkMatter', effect: 'x20 cosmic energy', maxLevel: 1, multiplier: 20},
             {id: 'alr', name: 'alr', icon: '👌', cost: 2000000000000000, costType: 'darkMatter', effect: 'x4 cosmic energy', maxLevel: 1, multiplier: 4},
-                    // Milestone definitions - dynamically calculated
+        // Milestone definitions - dynamically calculated
         function getMilestoneRequirement(index) {
             const baseRequirements = [10, 100, 1000, 10000, 100000, 500000, 2000000, 10000000, 50000000];
             
@@ -1552,7 +1552,7 @@
             
             return { energyMultiplier, darkMatterMultiplier, quantumLeapMultiplier };
         }
-                // Game loop
+        // Game loop
         function gameLoop() {
             // Update best cosmic energy record
             gameState.bestCosmicEnergy = Math.max(gameState.bestCosmicEnergy, gameState.cosmicEnergy);
